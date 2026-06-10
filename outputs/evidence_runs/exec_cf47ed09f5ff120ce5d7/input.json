@@ -1,0 +1,38 @@
+{
+  "envelope": {
+    "headers": {
+      "consumer": "SHAKTI_GOVERNANCE_CONSUMER",
+      "submittedBy": "GC_RUNTIME_EVIDENCE_PRODUCER",
+      "ticket_id": "runtime-proof-003"
+    },
+    "message": {
+      "content": {
+        "contract": "GC Governance SHAKTI convergence closure",
+        "evidence_focus": "lineage_capture",
+        "replay_parameters": {
+          "input_case": "runtime-proof-003",
+          "seedless": true
+        },
+        "run_index": 3,
+        "signals": [
+          {
+            "name": "bundle_generation",
+            "severity": "info",
+            "value": "complete"
+          },
+          {
+            "name": "deterministic_references",
+            "severity": "info",
+            "value": "enabled"
+          },
+          {
+            "name": "handover_readiness",
+            "severity": "info",
+            "value": "ready"
+          }
+        ]
+      },
+      "eventType": "lineage_capture"
+    }
+  }
+}

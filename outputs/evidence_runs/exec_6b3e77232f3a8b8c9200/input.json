@@ -1,0 +1,32 @@
+{
+  "case-id": "runtime-proof-005",
+  "event-type": "consumer_handoff",
+  "source.system": "GC_RUNTIME_EVIDENCE_PRODUCER",
+  "target/system": "SHAKTI_GOVERNANCE_CONSUMER",
+  "values": {
+    "contract": "GC Governance SHAKTI convergence closure",
+    "evidence_focus": "consumer_handoff",
+    "replay_parameters": {
+      "input_case": "runtime-proof-005",
+      "seedless": true
+    },
+    "run_index": 5,
+    "signals": [
+      {
+        "name": "bundle_generation",
+        "severity": "info",
+        "value": "complete"
+      },
+      {
+        "name": "deterministic_references",
+        "severity": "info",
+        "value": "enabled"
+      },
+      {
+        "name": "handover_readiness",
+        "severity": "info",
+        "value": "ready"
+      }
+    ]
+  }
+}

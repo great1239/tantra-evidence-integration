@@ -1,0 +1,52 @@
+{
+  "blocker_count": 0,
+  "case_id": "runtime-proof-010",
+  "execution_status": "success",
+  "governance_posture": "ready_for_consumer_validation",
+  "ignored_signal_count": 0,
+  "missing_required_fields": [],
+  "normalization": {
+    "field_sources": {
+      "case_id": {
+        "matched_key": "runId",
+        "path": "$.irrelevant_wrapper.trace.runId"
+      },
+      "operation": {
+        "matched_key": "task",
+        "path": "$.irrelevant_wrapper.request.task"
+      },
+      "payload": {
+        "matched_key": "request",
+        "path": "$.irrelevant_wrapper.request"
+      },
+      "source_system": {
+        "matched_key": "producer",
+        "path": "$.irrelevant_wrapper.routing.producer"
+      },
+      "target_system": {
+        "matched_key": "sink",
+        "path": "$.irrelevant_wrapper.routing.sink"
+      }
+    },
+    "missing_fields": [],
+    "raw_input_sha256": "558e7123e1eedd45e86bbd3fcba10919a8a140209a509f401efe4cbc56fc75e6",
+    "raw_input_type": "dict",
+    "status": "canonicalized_from_noncanonical_input"
+  },
+  "observations": [
+    {
+      "code": "RUNTIME_PAYLOAD_PROCESSED",
+      "message": "Input payload was processed by the local runtime evidence producer."
+    },
+    {
+      "code": "CONSUMER_READY",
+      "message": "ready_for_consumer_validation"
+    }
+  ],
+  "operation": "consumer_handoff",
+  "payload_digest": "54c98379053f6c4975a2014e7e0ce5454108d251bd830526f69a571bf47f1972",
+  "payload_field_count": 2,
+  "readiness_score": 1.0,
+  "signal_count": 0,
+  "warning_count": 0
+}

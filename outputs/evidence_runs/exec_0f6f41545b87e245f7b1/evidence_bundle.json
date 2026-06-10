@@ -1,0 +1,102 @@
+{
+  "artifact_reference": "exec_0f6f41545b87e245f7b1",
+  "artifacts": {
+    "handover": {
+      "reference": "handover_bundle.json",
+      "sha256": "7cc3ff4c5a2f4c706567b46218657e45032534c43ed9e2677ccc84b3283defa1"
+    },
+    "input": {
+      "reference": "input.json",
+      "sha256": "1c17db2d5352f4591590140592ac839231808e6bf6069d6f0769c5bd04a6ad47"
+    },
+    "lineage": {
+      "reference": "lineage_bundle.json",
+      "sha256": "5d808b927a2ae2d1c88e3c442a55d536a4bc5c10c3c7460178e45a019ee146af"
+    },
+    "output": {
+      "reference": "output.json",
+      "sha256": "3c8882cc144e4276b4e66828645ff7d94fbabda33778cbf9c5a8986c0867a109"
+    },
+    "replay": {
+      "reference": "replay_bundle.json",
+      "sha256": "0d59568f0f42fcf12b777da8b304a0b59bb3e369e1d75dbe02c1203a42a4ffa7"
+    }
+  },
+  "confidence": 1.0,
+  "consumer_compatibility": {
+    "contract": "shakti-runtime-evidence/v1",
+    "primary_consumer": "SHAKTI_GOVERNANCE_CONSUMER",
+    "self_contained": true
+  },
+  "contract_version": "shakti-runtime-evidence/v1",
+  "execution_context": {
+    "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
+    "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
+    "what_happened": "artifact_generation executed with status success.",
+    "what_produced_it": "operational_drift_monitor.py",
+    "when_it_happened": "2026-06-10T08:45:26Z",
+    "where_it_happened": "runtime-evidence-producer"
+  },
+  "execution_id": "exec_0f6f41545b87e245f7b1",
+  "execution_status": "success",
+  "input_extraction": {
+    "canonical_fields": {
+      "case_id": "runtime-proof-002",
+      "operation": "artifact_generation",
+      "payload_sha256": "e5e33008d0bf2c44009128d7430c8ea07ce341b1af1ca6d3c4a82847f0b4fdd3",
+      "payload_type": "dict",
+      "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
+      "target_system": "SHAKTI_GOVERNANCE_CONSUMER"
+    },
+    "field_sources": {
+      "case_id": {
+        "matched_key": "caseId",
+        "path": "$.metadata.caseId"
+      },
+      "operation": {
+        "matched_key": "type",
+        "path": "$.event.type"
+      },
+      "payload": {
+        "matched_key": "body",
+        "path": "$.event.body"
+      },
+      "source_system": {
+        "matched_key": "sourceSystem",
+        "path": "$.metadata.sourceSystem"
+      },
+      "target_system": {
+        "matched_key": "targetSystem",
+        "path": "$.metadata.targetSystem"
+      }
+    },
+    "input_reference": "input.json",
+    "input_shape": "noncanonical_extracted",
+    "missing_fields": [],
+    "raw_input_sha256": "ccabc17c99d49fd8197353deaf5dc655e334285f9dba7f41654abb7fdc24115a",
+    "raw_input_type": "dict"
+  },
+  "payload_reference": {
+    "reference": "input.json",
+    "sha256": "1c17db2d5352f4591590140592ac839231808e6bf6069d6f0769c5bd04a6ad47"
+  },
+  "producer": {
+    "entrypoint": "operational_drift_monitor.py",
+    "name": "runtime-evidence-producer",
+    "version": "1.0.0"
+  },
+  "replay_reference": "replay_8869e5c36361edeaae01",
+  "schema_version": "1.0.0",
+  "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
+  "summary": {
+    "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
+    "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
+    "what_happened": "artifact_generation executed with status success.",
+    "what_produced_it": "operational_drift_monitor.py",
+    "when_it_happened": "2026-06-10T08:45:26Z",
+    "where_it_happened": "runtime-evidence-producer"
+  },
+  "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
+  "timestamp": "2026-06-10T08:45:26Z",
+  "trace_id": "trace_a2392002ebd371e845cb"
+}

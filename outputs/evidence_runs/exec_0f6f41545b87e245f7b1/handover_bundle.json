@@ -1,0 +1,73 @@
+{
+  "bundle_index": {
+    "evidence": "evidence_bundle.json",
+    "input": "input.json",
+    "lineage": "lineage_bundle.json",
+    "log": "execution.log",
+    "output": "output.json",
+    "replay": "replay_bundle.json"
+  },
+  "consumer_instructions": [
+    "Read evidence_bundle.json first for the canonical execution summary.",
+    "Use lineage_bundle.json to reconstruct producer, artifact, and consumer relationships.",
+    "Use replay_bundle.json to rerun the input and compare output hashes."
+  ],
+  "contract_version": "shakti-runtime-evidence/v1",
+  "execution_context": {
+    "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
+    "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
+    "what_happened": "artifact_generation executed with status success.",
+    "what_produced_it": "operational_drift_monitor.py",
+    "when_it_happened": "2026-06-10T08:45:26Z",
+    "where_it_happened": "runtime-evidence-producer"
+  },
+  "execution_id": "exec_0f6f41545b87e245f7b1",
+  "handover_reference": "handover_a7c4d5056c4bfd9a1b69",
+  "input_extraction": {
+    "canonical_fields": {
+      "case_id": "runtime-proof-002",
+      "operation": "artifact_generation",
+      "payload_sha256": "e5e33008d0bf2c44009128d7430c8ea07ce341b1af1ca6d3c4a82847f0b4fdd3",
+      "payload_type": "dict",
+      "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
+      "target_system": "SHAKTI_GOVERNANCE_CONSUMER"
+    },
+    "field_sources": {
+      "case_id": {
+        "matched_key": "caseId",
+        "path": "$.metadata.caseId"
+      },
+      "operation": {
+        "matched_key": "type",
+        "path": "$.event.type"
+      },
+      "payload": {
+        "matched_key": "body",
+        "path": "$.event.body"
+      },
+      "source_system": {
+        "matched_key": "sourceSystem",
+        "path": "$.metadata.sourceSystem"
+      },
+      "target_system": {
+        "matched_key": "targetSystem",
+        "path": "$.metadata.targetSystem"
+      }
+    },
+    "input_reference": "input.json",
+    "input_shape": "noncanonical_extracted",
+    "missing_fields": [],
+    "raw_input_sha256": "ccabc17c99d49fd8197353deaf5dc655e334285f9dba7f41654abb7fdc24115a",
+    "raw_input_type": "dict"
+  },
+  "integration_readiness": "ready_for_consumer_validation",
+  "known_limitations": [
+    "This repository contained no upstream SHAKTI runtime, so the local reference runtime is the execution source.",
+    "Timestamps record actual execution time and are not part of deterministic identifier generation."
+  ],
+  "schema_version": "1.0.0",
+  "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
+  "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
+  "timestamp": "2026-06-10T08:45:26Z",
+  "trace_id": "trace_a2392002ebd371e845cb"
+}

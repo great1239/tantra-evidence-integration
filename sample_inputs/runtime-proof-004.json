@@ -1,0 +1,42 @@
+[
+  {
+    "record_id": "runtime-proof-004"
+  },
+  {
+    "from": "GC_RUNTIME_EVIDENCE_PRODUCER"
+  },
+  {
+    "to": "SHAKTI_GOVERNANCE_CONSUMER"
+  },
+  {
+    "action": "replay_reference_capture"
+  },
+  {
+    "data": {
+      "contract": "GC Governance SHAKTI convergence closure",
+      "evidence_focus": "replay_reference_capture",
+      "replay_parameters": {
+        "input_case": "runtime-proof-004",
+        "seedless": true
+      },
+      "run_index": 4,
+      "signals": [
+        {
+          "name": "bundle_generation",
+          "severity": "info",
+          "value": "complete"
+        },
+        {
+          "name": "deterministic_references",
+          "severity": "info",
+          "value": "enabled"
+        },
+        {
+          "name": "handover_readiness",
+          "severity": "warning",
+          "value": "review"
+        }
+      ]
+    }
+  }
+]

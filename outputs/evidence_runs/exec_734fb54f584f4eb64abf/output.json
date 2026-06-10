@@ -1,0 +1,52 @@
+{
+  "blocker_count": 0,
+  "case_id": "runtime-proof-009",
+  "execution_status": "success",
+  "governance_posture": "ready_for_consumer_validation",
+  "ignored_signal_count": 0,
+  "missing_required_fields": [],
+  "normalization": {
+    "field_sources": {
+      "case_id": {
+        "matched_key": "case",
+        "path": "$.headers.case"
+      },
+      "operation": {
+        "matched_key": "eventType",
+        "path": "$.message.eventType"
+      },
+      "payload": {
+        "matched_key": "data",
+        "path": "$.message.data"
+      },
+      "source_system": {
+        "matched_key": "originSystem",
+        "path": "$.headers.originSystem"
+      },
+      "target_system": {
+        "matched_key": "targetSystem",
+        "path": "$.headers.targetSystem"
+      }
+    },
+    "missing_fields": [],
+    "raw_input_sha256": "9e398a65ac789b663f7694c1bf2f3c8dc4aee4af350e5cfc571eb7ed1fca33dd",
+    "raw_input_type": "dict",
+    "status": "canonicalized_from_noncanonical_input"
+  },
+  "observations": [
+    {
+      "code": "RUNTIME_PAYLOAD_PROCESSED",
+      "message": "Input payload was processed by the local runtime evidence producer."
+    },
+    {
+      "code": "CONSUMER_READY",
+      "message": "ready_for_consumer_validation"
+    }
+  ],
+  "operation": "replay_reference_capture",
+  "payload_digest": "6e2f6e20b75af2a67eb6f5d6153a6ae3e7c4ace7f373c6b107fe8e41407627b5",
+  "payload_field_count": 5,
+  "readiness_score": 1.0,
+  "signal_count": 3,
+  "warning_count": 0
+}

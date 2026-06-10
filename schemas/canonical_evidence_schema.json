@@ -1,0 +1,106 @@
+{
+  "$id": "https://local.shakti/schemas/canonical_evidence_schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "description": "Canonical schema for one SHAKTI runtime evidence bundle.",
+  "properties": {
+    "artifact_reference": {
+      "description": "Run directory name relative to the output root.",
+      "minLength": 1,
+      "pattern": "^exec_[a-f0-9]{20}$",
+      "type": "string"
+    },
+    "confidence": {
+      "description": "Runtime confidence/readiness score.",
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "contract_version": {
+      "const": "shakti-runtime-evidence/v1",
+      "description": "Evidence contract expected by the consumer."
+    },
+    "execution_id": {
+      "description": "Deterministic execution identifier.",
+      "pattern": "^exec_[a-f0-9]{20}$",
+      "type": "string"
+    },
+    "execution_status": {
+      "description": "Runtime execution result.",
+      "enum": [
+        "success",
+        "failed"
+      ],
+      "type": "string"
+    },
+    "payload_reference": {
+      "$ref": "#/$defs/artifact_reference",
+      "description": "Reference and hash for raw input.json."
+    },
+    "replay_reference": {
+      "description": "Deterministic replay identifier.",
+      "pattern": "^replay_[a-f0-9]{20}$",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "description": "Canonical evidence schema version."
+    },
+    "source_system": {
+      "description": "System that submitted or represents the input.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "target_system": {
+      "description": "Intended governance consumer.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "timestamp": {
+      "description": "UTC generation timestamp. This field is intentionally not deterministic.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+      "type": "string"
+    },
+    "trace_id": {
+      "description": "Deterministic trace identifier.",
+      "pattern": "^trace_[a-f0-9]{20}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "execution_id",
+    "trace_id",
+    "contract_version",
+    "schema_version",
+    "timestamp",
+    "source_system",
+    "target_system",
+    "payload_reference",
+    "artifact_reference",
+    "replay_reference",
+    "execution_status",
+    "confidence"
+  ],
+  "title": "Canonical Runtime Evidence Schema",
+  "type": "object",
+  "$defs": {
+    "artifact_reference": {
+      "additionalProperties": false,
+      "properties": {
+        "reference": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reference",
+        "sha256"
+      ],
+      "type": "object"
+    }
+  }
+}

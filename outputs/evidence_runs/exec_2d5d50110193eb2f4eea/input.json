@@ -1,0 +1,36 @@
+{
+  "attributes": {
+    "contract": "GC Governance SHAKTI convergence closure",
+    "evidence_focus": "artifact_generation",
+    "replay_parameters": {
+      "input_case": "runtime-proof-007",
+      "seedless": true
+    },
+    "run_index": 7,
+    "signals": [
+      {
+        "name": "bundle_generation",
+        "severity": "info",
+        "value": "complete"
+      },
+      {
+        "name": "deterministic_references",
+        "severity": "info",
+        "value": "enabled"
+      },
+      {
+        "name": "handover_readiness",
+        "severity": "info",
+        "value": "ready"
+      }
+    ]
+  },
+  "execution": {
+    "executionId": "runtime-proof-007",
+    "workflow": "artifact_generation"
+  },
+  "systems": {
+    "dst": "SHAKTI_GOVERNANCE_CONSUMER",
+    "src": "GC_RUNTIME_EVIDENCE_PRODUCER"
+  }
+}

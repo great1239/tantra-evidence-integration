@@ -1,0 +1,117 @@
+{
+  "contract_version": "shakti-runtime-evidence/v1",
+  "edges": [
+    {
+      "from": "input_payload",
+      "relationship": "consumed_by",
+      "to": "runtime_processor"
+    },
+    {
+      "from": "runtime_processor",
+      "relationship": "produced",
+      "to": "runtime_output"
+    },
+    {
+      "from": "runtime_output",
+      "relationship": "available_to",
+      "to": "governance_consumer"
+    }
+  ],
+  "execution_context": {
+    "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
+    "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
+    "what_happened": "consumer_handoff executed with status success.",
+    "what_produced_it": "operational_drift_monitor.py",
+    "when_it_happened": "2026-06-10T08:45:26Z",
+    "where_it_happened": "runtime-evidence-producer"
+  },
+  "execution_id": "exec_6b3e77232f3a8b8c9200",
+  "input_extraction": {
+    "canonical_fields": {
+      "case_id": "runtime-proof-005",
+      "operation": "consumer_handoff",
+      "payload_sha256": "da12fbe08930311add6d422b5f2409a85d0ecf1195b97f4d70ae7c7510d4b136",
+      "payload_type": "dict",
+      "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
+      "target_system": "SHAKTI_GOVERNANCE_CONSUMER"
+    },
+    "field_sources": {
+      "case_id": {
+        "matched_key": "case-id",
+        "path": "$.case-id"
+      },
+      "operation": {
+        "matched_key": "event-type",
+        "path": "$.event-type"
+      },
+      "payload": {
+        "matched_key": "values",
+        "path": "$.values"
+      },
+      "source_system": {
+        "matched_key": "source.system",
+        "path": "$.source.system"
+      },
+      "target_system": {
+        "matched_key": "target/system",
+        "path": "$.target/system"
+      }
+    },
+    "input_reference": "input.json",
+    "input_shape": "noncanonical_extracted",
+    "missing_fields": [],
+    "raw_input_sha256": "1b99e84d3af1044793cc27fb804d07d6253b834d3754058fbabbe6111d7feaf6",
+    "raw_input_type": "dict"
+  },
+  "lineage_reference": "lineage_ed9ad4acdaf7c9969f05",
+  "nodes": [
+    {
+      "id": "input_payload",
+      "reference": "input.json",
+      "sha256": "8a3c3c375aea280cebc819d930264c5df3a0d9a409cb38e0e598b9f6002ccfdf",
+      "type": "payload"
+    },
+    {
+      "id": "runtime_processor",
+      "name": "runtime-evidence-producer",
+      "type": "producer",
+      "version": "1.0.0"
+    },
+    {
+      "id": "runtime_output",
+      "reference": "output.json",
+      "sha256": "3dc1ee8f7b491c003b0c4a1af86a8c711e9158c3a0b4311eab5c019209d97a72",
+      "type": "artifact"
+    },
+    {
+      "id": "governance_consumer",
+      "name": "SHAKTI_GOVERNANCE_CONSUMER",
+      "type": "consumer"
+    }
+  ],
+  "provenance_chain": [
+    {
+      "action": "submitted_payload",
+      "actor": "GC_RUNTIME_EVIDENCE_PRODUCER",
+      "artifact": "input.json",
+      "step": 1
+    },
+    {
+      "action": "executed_payload",
+      "actor": "runtime-evidence-producer",
+      "artifact": "output.json",
+      "step": 2
+    },
+    {
+      "action": "generated_evidence_bundles",
+      "actor": "runtime-evidence-producer",
+      "artifact": "evidence_bundle.json",
+      "step": 3
+    }
+  ],
+  "schema_version": "1.0.0",
+  "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
+  "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
+  "timestamp": "2026-06-10T08:45:26Z",
+  "trace_id": "trace_1e1dab2495556e8ea7b2"
+}

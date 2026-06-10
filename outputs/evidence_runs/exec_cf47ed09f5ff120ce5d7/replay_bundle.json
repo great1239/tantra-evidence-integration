@@ -1,0 +1,78 @@
+{
+  "contract_version": "shakti-runtime-evidence/v1",
+  "determinism": {
+    "execution_id_basis": "sha256(contract_version + schema_version + extracted_canonical_input_payload)",
+    "random_generation": "not_used",
+    "trace_id_basis": "sha256(case_id + extracted_canonical_input_payload)"
+  },
+  "execution_context": {
+    "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
+    "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
+    "what_happened": "lineage_capture executed with status success.",
+    "what_produced_it": "operational_drift_monitor.py",
+    "when_it_happened": "2026-06-10T08:45:26Z",
+    "where_it_happened": "runtime-evidence-producer"
+  },
+  "execution_id": "exec_cf47ed09f5ff120ce5d7",
+  "expected_outputs": [
+    {
+      "reference": "output.json",
+      "sha256": "d9c27985a280e56d3bea7403da7c77c72d6276437e8bbb64290c274e42d88fa9"
+    }
+  ],
+  "input_extraction": {
+    "canonical_fields": {
+      "case_id": "runtime-proof-003",
+      "operation": "lineage_capture",
+      "payload_sha256": "c93e1db0e3c0dfa08bd673dc2a032d6ff43ce815b8f336daa790422336e1e3c3",
+      "payload_type": "dict",
+      "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
+      "target_system": "SHAKTI_GOVERNANCE_CONSUMER"
+    },
+    "field_sources": {
+      "case_id": {
+        "matched_key": "ticket_id",
+        "path": "$.envelope.headers.ticket_id"
+      },
+      "operation": {
+        "matched_key": "eventType",
+        "path": "$.envelope.message.eventType"
+      },
+      "payload": {
+        "matched_key": "content",
+        "path": "$.envelope.message.content"
+      },
+      "source_system": {
+        "matched_key": "submittedBy",
+        "path": "$.envelope.headers.submittedBy"
+      },
+      "target_system": {
+        "matched_key": "consumer",
+        "path": "$.envelope.headers.consumer"
+      }
+    },
+    "input_reference": "input.json",
+    "input_shape": "noncanonical_extracted",
+    "missing_fields": [],
+    "raw_input_sha256": "95c4c4f1c856d0becb2b2e53dd813dc522dc0505040e958be6d50d3513901d2c",
+    "raw_input_type": "dict"
+  },
+  "replay_command": "python operational_drift_monitor.py run --input outputs/evidence_runs/exec_cf47ed09f5ff120ce5d7/input.json --out outputs/evidence_runs",
+  "replay_inputs": [
+    {
+      "reference": "input.json",
+      "sha256": "11f98b70a975479e2f9c61d44efab7aa88212eb9425e68d8588918fe7196ac56"
+    }
+  ],
+  "replay_reference": "replay_dea037cd4f71e90782e9",
+  "runtime_requirements": {
+    "entrypoint": "operational_drift_monitor.py",
+    "language": "python",
+    "stdlib_only": true
+  },
+  "schema_version": "1.0.0",
+  "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
+  "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
+  "timestamp": "2026-06-10T08:45:26Z",
+  "trace_id": "trace_aed21d0f4a7b68a2fef3"
+}
