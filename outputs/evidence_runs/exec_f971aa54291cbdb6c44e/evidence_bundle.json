@@ -3,7 +3,7 @@
   "artifacts": {
     "handover": {
       "reference": "handover_bundle.json",
-      "sha256": "910f739385e10c32415ea26f8dd10fd92ff12480816a238bc2e6757aa1b7fc14"
+      "sha256": "09791619b058a25662ad7330afa1599b4fd8687ed8d1235443085af055d6e9e6"
     },
     "input": {
       "reference": "input.json",
@@ -11,7 +11,7 @@
     },
     "lineage": {
       "reference": "lineage_bundle.json",
-      "sha256": "4eeff7533037b5839edb4b5d3829249233e8c8e6ca38d70eb615e7b610712df9"
+      "sha256": "6381e57f50e754f7accf364e34765ab8ccc7dddcca526300b3f3b66af40f227a"
     },
     "output": {
       "reference": "output.json",
@@ -19,7 +19,7 @@
     },
     "replay": {
       "reference": "replay_bundle.json",
-      "sha256": "26938e95fdcb687c3da31bab179cce66b816b94b26c171bc19ed46c757145bb0"
+      "sha256": "f2375ecab0c7c72d4b0275bef166883c67164fab56e364bcf66e7dca38381ffb"
     }
   },
   "confidence": 1.0,
@@ -33,8 +33,8 @@
     "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "consumer_handoff executed with status success.",
-    "what_produced_it": "operational_drift_monitor.py",
-    "when_it_happened": "2026-06-10T08:45:26Z",
+    "what_produced_it": "runtime_evidence_producer.py",
+    "when_it_happened": "2026-06-10T10:01:31Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "execution_id": "exec_f971aa54291cbdb6c44e",
@@ -81,7 +81,7 @@
     "sha256": "0899463692cf3ce328a305ba4c1a1f4ef17661c8ef505a6916b626cf463074a6"
   },
   "producer": {
-    "entrypoint": "operational_drift_monitor.py",
+    "entrypoint": "runtime_evidence_producer.py",
     "name": "runtime-evidence-producer",
     "version": "1.0.0"
   },
@@ -92,11 +92,11 @@
     "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "consumer_handoff executed with status success.",
-    "what_produced_it": "operational_drift_monitor.py",
-    "when_it_happened": "2026-06-10T08:45:26Z",
+    "what_produced_it": "runtime_evidence_producer.py",
+    "when_it_happened": "2026-06-10T10:01:31Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-10T08:45:26Z",
+  "timestamp": "2026-06-10T10:01:31Z",
   "trace_id": "trace_d880149e64efc229c97c"
 }

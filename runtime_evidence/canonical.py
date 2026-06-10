@@ -10,6 +10,7 @@ from typing import Any
 CONTRACT_VERSION = "shakti-runtime-evidence/v1"
 SCHEMA_VERSION = "1.0.0"
 PRODUCER_NAME = "runtime-evidence-producer"
+ENTRYPOINT_NAME = "runtime_evidence_producer.py"
 
 
 def canonical_json(value: Any) -> str:

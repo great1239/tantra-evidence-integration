@@ -9,8 +9,8 @@
     "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "artifact_generation executed with status success.",
-    "what_produced_it": "operational_drift_monitor.py",
-    "when_it_happened": "2026-06-10T08:45:26Z",
+    "what_produced_it": "runtime_evidence_producer.py",
+    "when_it_happened": "2026-06-10T10:01:31Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "execution_id": "exec_2d5d50110193eb2f4eea",
@@ -57,7 +57,7 @@
     "raw_input_sha256": "d22344edfd296490c92911bc39b12f0924f73b5957eb6ab1f8544aaebef39af9",
     "raw_input_type": "dict"
   },
-  "replay_command": "python operational_drift_monitor.py run --input outputs/evidence_runs/exec_2d5d50110193eb2f4eea/input.json --out outputs/evidence_runs",
+  "replay_command": "python runtime_evidence_producer.py run --input outputs/evidence_runs/exec_2d5d50110193eb2f4eea/input.json --out outputs/evidence_runs",
   "replay_inputs": [
     {
       "reference": "input.json",
@@ -66,13 +66,13 @@
   ],
   "replay_reference": "replay_cca26e18968ea1c2c563",
   "runtime_requirements": {
-    "entrypoint": "operational_drift_monitor.py",
+    "entrypoint": "runtime_evidence_producer.py",
     "language": "python",
     "stdlib_only": true
   },
   "schema_version": "1.0.0",
   "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-10T08:45:26Z",
+  "timestamp": "2026-06-10T10:01:31Z",
   "trace_id": "trace_4a189f49982d302b8737"
 }

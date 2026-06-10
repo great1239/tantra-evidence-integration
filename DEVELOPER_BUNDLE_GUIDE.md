@@ -1,4 +1,4 @@
-# Developer Bundle Guide
+﻿# Developer Bundle Guide
 
 This guide is the first file a new developer should read when trying to understand the generated runtime evidence containers.
 
@@ -49,7 +49,7 @@ Every required bundle includes `execution_context` with the same six fields.
 | `what_happened` | Operation executed and resulting status. |
 | `where_it_happened` | Runtime/evidence producer location. |
 | `when_it_happened` | Bundle generation timestamp. |
-| `what_produced_it` | Entrypoint that produced the bundle, currently `operational_drift_monitor.py`. |
+| `what_produced_it` | Entrypoint that produced the bundle, currently `runtime_evidence_producer.py`. |
 | `what_consumed_it` | Intended consumer extracted from the input. |
 | `what_can_be_replayed` | Replayable artifact and where to find the replay command. |
 
@@ -236,13 +236,13 @@ The command below validates these criteria structurally for every run container.
 Generate the required 10-run proof set:
 
 ```bash
-python operational_drift_monitor.py demo --count 10 --out outputs/evidence_runs
+python runtime_evidence_producer.py demo --count 10 --out outputs/evidence_runs
 ```
 
 Validate the generated containers:
 
 ```bash
-python operational_drift_monitor.py validate --root outputs/evidence_runs --min-runs 10
+python runtime_evidence_producer.py validate --root outputs/evidence_runs --min-runs 10
 ```
 
 Run the unit tests:
@@ -250,3 +250,4 @@ Run the unit tests:
 ```bash
 python -m unittest discover -s tests
 ```
+

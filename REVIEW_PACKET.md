@@ -1,25 +1,25 @@
-# Review Packet
+﻿# Review Packet
 
 ## Entry Point
 
-Use `operational_drift_monitor.py`.
+Use `runtime_evidence_producer.py`.
 
 Generate proof:
 
 ```bash
-python operational_drift_monitor.py demo --count 10 --out outputs/evidence_runs
+python runtime_evidence_producer.py demo --count 10 --out outputs/evidence_runs
 ```
 
 Validate proof:
 
 ```bash
-python operational_drift_monitor.py validate --root outputs/evidence_runs --min-runs 10
+python runtime_evidence_producer.py validate --root outputs/evidence_runs --min-runs 10
 ```
 
 Run one payload:
 
 ```bash
-python operational_drift_monitor.py run --input sample_inputs/runtime-proof-001.json --out outputs/evidence_runs
+python runtime_evidence_producer.py run --input sample_inputs/runtime-proof-001.json --out outputs/evidence_runs
 ```
 
 ## Execution Flow
@@ -29,7 +29,7 @@ The CLI reads an input JSON payload, extracts canonical fields when the input is
 Execution path:
 
 ```text
-operational_drift_monitor.py
+runtime_evidence_producer.py
   -> produce_evidence_run(...)
   -> execute_payload(...)
   -> write raw input/output
@@ -141,7 +141,8 @@ Current readiness: `ready_for_consumer_validation`.
 
 The evidence layer is ready for consumer validation once:
 
-- `python operational_drift_monitor.py validate --root outputs/evidence_runs --min-runs 10` returns `{"status":"ok"}`.
+- `python runtime_evidence_producer.py validate --root outputs/evidence_runs --min-runs 10` returns `{"status":"ok"}`.
 - all 10 execution directories contain the exact required filenames.
 - replay reconstruction matches the expected output hash.
 - lineage reconstruction identifies input, producer, output, and consumer.
+

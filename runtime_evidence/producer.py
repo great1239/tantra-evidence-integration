@@ -8,6 +8,7 @@ from typing import Any
 
 from .canonical import (
     CONTRACT_VERSION,
+    ENTRYPOINT_NAME,
     PRODUCER_NAME,
     SCHEMA_VERSION,
     pretty_json,
@@ -145,7 +146,7 @@ def _execution_context(payload: dict[str, Any], result: dict[str, Any], timestam
         "what_happened": f"{payload.get('operation', 'unknown')} executed with status {result['execution_status']}.",
         "where_it_happened": PRODUCER_NAME,
         "when_it_happened": timestamp,
-        "what_produced_it": "operational_drift_monitor.py",
+        "what_produced_it": ENTRYPOINT_NAME,
         "what_consumed_it": payload.get("target_system", "unknown"),
         "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
     }
@@ -286,7 +287,7 @@ def produce_evidence_run(input_path: Path, output_root: Path) -> Path:
         "execution_context": execution_context,
         "input_extraction": input_extraction,
         "replay_reference": replay_reference,
-        "replay_command": f"python operational_drift_monitor.py run --input {run_input_path.as_posix()} --out {output_root.as_posix()}",
+        "replay_command": f"python {ENTRYPOINT_NAME} run --input {run_input_path.as_posix()} --out {output_root.as_posix()}",
         "replay_inputs": [
             {
                 "reference": "input.json",
@@ -307,7 +308,7 @@ def produce_evidence_run(input_path: Path, output_root: Path) -> Path:
         "runtime_requirements": {
             "language": "python",
             "stdlib_only": True,
-            "entrypoint": "operational_drift_monitor.py",
+            "entrypoint": ENTRYPOINT_NAME,
         },
     }
     write_json(replay_path, replay_bundle)
@@ -359,7 +360,7 @@ def produce_evidence_run(input_path: Path, output_root: Path) -> Path:
         "producer": {
             "name": PRODUCER_NAME,
             "version": SCHEMA_VERSION,
-            "entrypoint": "operational_drift_monitor.py",
+            "entrypoint": ENTRYPOINT_NAME,
         },
         "consumer_compatibility": {
             "primary_consumer": payload.get("target_system", "unknown"),
@@ -577,8 +578,8 @@ def _validate_replay_bundle(run_dir: Path, replay: Any, errors: list[str]) -> No
         errors.append(f"{run_dir}: replay_bundle.json must be a JSON object")
         return
 
-    if not isinstance(replay.get("replay_command"), str) or "operational_drift_monitor.py run" not in replay["replay_command"]:
-        errors.append(f"{run_dir}: replay_bundle.json replay_command must run operational_drift_monitor.py")
+    if not isinstance(replay.get("replay_command"), str) or f"{ENTRYPOINT_NAME} run" not in replay["replay_command"]:
+        errors.append(f"{run_dir}: replay_bundle.json replay_command must run {ENTRYPOINT_NAME}")
 
     replay_inputs = replay.get("replay_inputs")
     if not isinstance(replay_inputs, list) or not replay_inputs:
@@ -605,7 +606,7 @@ def _validate_replay_bundle(run_dir: Path, replay: Any, errors: list[str]) -> No
         errors.append(f"{run_dir}: replay_bundle.json determinism.random_generation must be not_used")
 
     runtime_requirements = replay.get("runtime_requirements")
-    if not isinstance(runtime_requirements, dict) or runtime_requirements.get("entrypoint") != "operational_drift_monitor.py":
+    if not isinstance(runtime_requirements, dict) or runtime_requirements.get("entrypoint") != ENTRYPOINT_NAME:
         errors.append(f"{run_dir}: replay_bundle.json runtime_requirements.entrypoint mismatch")
 
 

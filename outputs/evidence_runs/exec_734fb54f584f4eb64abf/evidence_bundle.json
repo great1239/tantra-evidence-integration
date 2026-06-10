@@ -3,7 +3,7 @@
   "artifacts": {
     "handover": {
       "reference": "handover_bundle.json",
-      "sha256": "f73c8ae898509293e65b2578871e78f8aded9554daf22bb7809d31002976be1b"
+      "sha256": "3f49db2da0ec5e9570230fa7fd43195cc025db4ae6f84e5e7549dfb657bd836a"
     },
     "input": {
       "reference": "input.json",
@@ -11,7 +11,7 @@
     },
     "lineage": {
       "reference": "lineage_bundle.json",
-      "sha256": "82f8d707edd1602f22e495c287de3ec25ec23d23ccdf891e248b00ebbb0a8f81"
+      "sha256": "0e62fbb78b5196fd3536866579c3d6c70d0e8223bdd608a64c6de461671340e4"
     },
     "output": {
       "reference": "output.json",
@@ -19,7 +19,7 @@
     },
     "replay": {
       "reference": "replay_bundle.json",
-      "sha256": "39ecc1cd523626ee7bda5eb294443d0d9dbb7d1d760f233e25e04e2e313afcbb"
+      "sha256": "ec16a32e6acc0de7d47587963ad00e8a75dd8f4880bb0d4542d3e73dcdf2eea8"
     }
   },
   "confidence": 1.0,
@@ -33,8 +33,8 @@
     "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "replay_reference_capture executed with status success.",
-    "what_produced_it": "operational_drift_monitor.py",
-    "when_it_happened": "2026-06-10T08:45:26Z",
+    "what_produced_it": "runtime_evidence_producer.py",
+    "when_it_happened": "2026-06-10T10:01:31Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "execution_id": "exec_734fb54f584f4eb64abf",
@@ -81,7 +81,7 @@
     "sha256": "ed43c24858718a6f82f234dbc77077ae1dc631303b91762e492f455b9394c237"
   },
   "producer": {
-    "entrypoint": "operational_drift_monitor.py",
+    "entrypoint": "runtime_evidence_producer.py",
     "name": "runtime-evidence-producer",
     "version": "1.0.0"
   },
@@ -92,11 +92,11 @@
     "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "replay_reference_capture executed with status success.",
-    "what_produced_it": "operational_drift_monitor.py",
-    "when_it_happened": "2026-06-10T08:45:26Z",
+    "what_produced_it": "runtime_evidence_producer.py",
+    "when_it_happened": "2026-06-10T10:01:31Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-10T08:45:26Z",
+  "timestamp": "2026-06-10T10:01:31Z",
   "trace_id": "trace_e603530f36f2faed84a0"
 }

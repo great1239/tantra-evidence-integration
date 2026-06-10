@@ -1,4 +1,4 @@
-# Consumer Guide
+﻿# Consumer Guide
 
 This guide is for the SHAKTI governance consumer that receives generated runtime evidence bundles.
 
@@ -52,13 +52,13 @@ The consumer can rely on these invariants:
 Validate the required 10-run proof set:
 
 ```bash
-python operational_drift_monitor.py validate --root outputs/evidence_runs --min-runs 10
+python runtime_evidence_producer.py validate --root outputs/evidence_runs --min-runs 10
 ```
 
 Validate the proof root with a lower minimum when only one run is required:
 
 ```bash
-python operational_drift_monitor.py validate --root outputs/evidence_runs --min-runs 1
+python runtime_evidence_producer.py validate --root outputs/evidence_runs --min-runs 1
 ```
 
 The validator checks required files, required evidence fields, and artifact hash consistency.
@@ -110,3 +110,4 @@ A package is ready for SHAKTI consumption when:
 - `input_extraction.missing_fields` is empty for successful execution.
 
 For edge cases and failure handling, see `EDGE_CASES_AND_FAILURES.md`.
+

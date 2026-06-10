@@ -1,11 +1,11 @@
-# Evidence Specification
+﻿# Evidence Specification
 
 ## Contract
 
 - Contract version: `shakti-runtime-evidence/v1`
 - Schema version: `1.0.0`
 - Canonical evidence schema: `schemas/canonical_evidence_schema.json`
-- Producer entrypoint: `operational_drift_monitor.py`
+- Producer entrypoint: `runtime_evidence_producer.py`
 - Default output root: `outputs/evidence_runs`
 
 Each execution directory is named by deterministic `execution_id` and contains the complete evidence package for that run.
@@ -204,3 +204,4 @@ runtime_output available_to governance_consumer
 ```
 
 The public formats are documented in this file using the exact bundle filenames required by the assignment.
+

@@ -3,7 +3,7 @@
   "artifacts": {
     "handover": {
       "reference": "handover_bundle.json",
-      "sha256": "e303d6c29aff0882c7a71b611b7fefb2b7eff1a3bd86f2a6c36d16e4a9dedbdd"
+      "sha256": "a0b82c773f64dd8aa86210cdc38a42658b8d704b46d84a67169bb51ee5c49fdf"
     },
     "input": {
       "reference": "input.json",
@@ -11,7 +11,7 @@
     },
     "lineage": {
       "reference": "lineage_bundle.json",
-      "sha256": "59daf4bf217e8fbb6af90b38256ac966391cd6ff5c2071b0b742c728cf4fe871"
+      "sha256": "4d1cc9073cd334f34c4c0fa79e36a4ff3ba0e829c352b34ad6b6c34af937f6bd"
     },
     "output": {
       "reference": "output.json",
@@ -19,7 +19,7 @@
     },
     "replay": {
       "reference": "replay_bundle.json",
-      "sha256": "59d8f223d89e665adabdd8bb0fb4f3f13dbd04eff060d63f28566690a674490f"
+      "sha256": "f03970951e9ebb2bb9db80468688047a5d3e523013978d78bcc1791227bf3594"
     }
   },
   "confidence": 1.0,
@@ -33,8 +33,8 @@
     "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "lineage_capture executed with status success.",
-    "what_produced_it": "operational_drift_monitor.py",
-    "when_it_happened": "2026-06-10T08:45:26Z",
+    "what_produced_it": "runtime_evidence_producer.py",
+    "when_it_happened": "2026-06-10T10:01:31Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "execution_id": "exec_cf47ed09f5ff120ce5d7",
@@ -81,7 +81,7 @@
     "sha256": "11f98b70a975479e2f9c61d44efab7aa88212eb9425e68d8588918fe7196ac56"
   },
   "producer": {
-    "entrypoint": "operational_drift_monitor.py",
+    "entrypoint": "runtime_evidence_producer.py",
     "name": "runtime-evidence-producer",
     "version": "1.0.0"
   },
@@ -92,11 +92,11 @@
     "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "lineage_capture executed with status success.",
-    "what_produced_it": "operational_drift_monitor.py",
-    "when_it_happened": "2026-06-10T08:45:26Z",
+    "what_produced_it": "runtime_evidence_producer.py",
+    "when_it_happened": "2026-06-10T10:01:31Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-10T08:45:26Z",
+  "timestamp": "2026-06-10T10:01:31Z",
   "trace_id": "trace_aed21d0f4a7b68a2fef3"
 }
