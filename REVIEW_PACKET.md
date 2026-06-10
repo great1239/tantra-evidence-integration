@@ -24,7 +24,7 @@ python runtime_evidence_producer.py run --input sample_inputs/runtime-proof-001.
 
 ## Execution Flow
 
-The CLI reads an input JSON payload, extracts canonical fields when the input is mangled, executes the local runtime processor, writes raw `input.json` and `output.json`, then generates the evidence, lineage, replay, and handover bundles.
+The CLI reads an input payload, extracts canonical fields when the input is mangled JSON or schema-free text, executes the local runtime processor, writes raw `input.json` and `output.json`, then generates the evidence, lineage, replay, and handover bundles.
 
 Execution path:
 
@@ -40,7 +40,7 @@ runtime_evidence_producer.py
 ## Evidence Generation Flow
 
 1. Read the submitted input payload.
-2. Extract canonical fields from aliases or nested objects when the input is noncanonical.
+2. Extract canonical fields from aliases, nested objects, or plain English text when the input is noncanonical.
 3. Record `_normalization.missing_fields` only for fields that cannot be extracted.
 4. Canonicalize input JSON for hashing.
 5. Generate deterministic `execution_id`, `trace_id`, and `replay_reference`.

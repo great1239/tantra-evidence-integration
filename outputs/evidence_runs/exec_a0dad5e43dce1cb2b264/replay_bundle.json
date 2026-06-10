@@ -10,7 +10,7 @@
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "evidence_standardization executed with status success.",
     "what_produced_it": "runtime_evidence_producer.py",
-    "when_it_happened": "2026-06-10T10:01:30Z",
+    "when_it_happened": "2026-06-10T10:19:06Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "execution_id": "exec_a0dad5e43dce1cb2b264",
@@ -73,6 +73,6 @@
   "schema_version": "1.0.0",
   "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-10T10:01:30Z",
+  "timestamp": "2026-06-10T10:19:06Z",
   "trace_id": "trace_898b8d586cd68f9c9703"
 }

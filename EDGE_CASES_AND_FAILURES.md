@@ -11,7 +11,10 @@ This file is the single source of truth for edge-case behavior and failure handl
 | Nested metadata/event input | Searches nested objects for aliases such as `metadata.caseId`, `metadata.sourceSystem`, `event.type`, and `event.body`. | Successful when all required fields are extracted. |
 | Missing `case_id`, `source_system`, `target_system`, or `operation` after extraction | Records impossible-to-extract fields in `_normalization.missing_fields`. | Bundles are still produced; `output.json.execution_status` is `failed`. |
 | Missing `payload` after extraction | Derives `payload` from the remaining raw input when possible. | Usually still produces an evidence package; missing payload is recorded only if derivation is impossible. |
-| Valid JSON scalar, such as a string or number | Wraps the raw scalar as `payload`; scalar canonical fields cannot be extracted. | Bundles are produced with `execution_status: failed` and missing scalar fields. |
+| Valid JSON scalar without recognizable evidence details, such as `"raw text payload"` or a number | Wraps the raw scalar as `payload`; canonical fields are recorded missing only after text extraction fails. | Bundles are produced with `execution_status: failed` and missing scalar fields. |
+| JSON string containing recognizable plain English evidence details | Extracts canonical fields using deterministic text patterns before missing-field fallback. | Successful when case, source, target, and operation are present in the text. |
+| Raw `.txt` file containing recognizable plain English evidence details | Reads the file as text, writes the text to `input.json`, and extracts canonical fields using deterministic text patterns. | Successful when case, source, target, and operation are present in the text. |
+| Plain text with no recognizable case/source/target/operation details | Preserves the text as payload and records only impossible-to-extract fields as missing. | Bundles are produced with `execution_status: failed`. |
 | Valid top-level JSON array | Searches items for aliases; if no aliases exist, the array becomes `payload`. | Successful only if required scalar fields are extracted somewhere in the array. |
 | Duplicate aliases for the same field | Chooses the best match by exact canonical key first, then shallower and more stable paths. | Bundle `input_extraction.field_sources` records the chosen source. |
 | Null scalar alias, such as `"case_id": null` in noncanonical input | Null is not treated as an extractable scalar. | Field remains missing unless another alias provides it. |
@@ -21,7 +24,7 @@ This file is the single source of truth for edge-case behavior and failure handl
 | `payload.signals` contains non-object items | Runtime ignores non-object signal items and records `ignored_signal_count` in `output.json`. | Successful if required canonical fields exist. |
 | Signal severity is `warning` | Reduces `confidence` by `0.1` per warning. | Bundle remains successful unless required fields are missing. |
 | Signal severity is `blocker` | Reduces `confidence` by `0.35` per blocker. | Bundle remains successful unless required fields are missing; posture may require review. |
-| Invalid JSON file | JSON parsing fails before normalization. | No evidence package is produced; the CLI exits with an error. |
+| Invalid JSON file that is readable as text | Treats the file as raw text input and attempts text extraction. | Bundles are produced; success depends on whether required fields can be extracted from the text. |
 | Input file path does not exist | File read fails. | No evidence package is produced; the CLI exits with an error. |
 | Output root does not exist during validation | Validator reports the missing root. | Validation fails. |
 | Required bundle file missing | Validator reports the missing file. | Validation fails. |
@@ -37,7 +40,8 @@ This file is the single source of truth for edge-case behavior and failure handl
 | Required canonical input fields cannot be extracted | Yes | Bundle `input_extraction.missing_fields`, `output.json.missing_required_fields`, `evidence_bundle.json.execution_status` | Treat as a failed execution package and inspect missing fields. |
 | Valid JSON scalar or array lacks extractable canonical fields | Yes | Bundle `input_extraction`, `output.json.missing_required_fields` | Treat as failed unless the missing fields are acceptable for a future adapter. |
 | Input file is missing | No | CLI error before `input.json` is written | Fix the path and rerun. |
-| Input file is invalid JSON | No | CLI JSON parsing error before normalization | Fix the JSON and rerun. |
+| Input file is unreadable | No | File read error before normalization | Fix permissions or path and rerun. |
+| Text input lacks extractable canonical fields | Yes | Bundle `input_extraction.missing_fields`, `output.json.missing_required_fields` | Treat as failed unless the missing fields are acceptable for a future adapter. |
 | Runtime payload contains malformed `signals` | Yes | `output.json.ignored_signal_count` when non-object signal items are ignored | Review ignored count; package can still be consumed if execution status is `success`. |
 | Required bundle file is missing | Existing package is incomplete | Validator output | Regenerate the evidence package. |
 | Required evidence field is missing | Existing package is invalid | Validator output | Regenerate or fix producer logic. |
@@ -47,7 +51,7 @@ This file is the single source of truth for edge-case behavior and failure handl
 
 ## Failure Categories
 
-- Pre-generation failures: missing input file or invalid JSON. No evidence package is produced.
+- Pre-generation failures: missing or unreadable input file. No evidence package is produced.
 - Runtime evidence failures: valid JSON is processed, but required canonical fields remain missing. A failed evidence package is produced.
 - Validation failures: package exists, but required files, required fields, or hashes do not match.
 - Replay failures: package validates structurally, but replayed output hash differs from the expected output hash.
@@ -56,7 +60,7 @@ This file is the single source of truth for edge-case behavior and failure handl
 ## Handling Summary
 
 - Failed execution with bundles present: inspect `output.json.missing_required_fields`, bundle `input_extraction`, and `execution.log`.
-- CLI failure before bundle generation: fix the input file path or JSON syntax and rerun.
+- CLI failure before bundle generation: fix the input file path or file readability and rerun.
 - Validation failure: regenerate the package from the source input before consumer ingestion.
 - Replay failure: compare the replayed `output.json` hash to `replay_bundle.json.expected_outputs[0].sha256` and investigate runtime drift.
 - Version mismatch: reject the package unless the consumer explicitly supports the reported `contract_version` and `schema_version`.

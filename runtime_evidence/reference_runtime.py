@@ -66,7 +66,7 @@ def execute_payload(payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def demo_payloads(count: int = 10) -> list[dict[str, Any]]:
+def demo_payloads(count: int = 10) -> list[Any]:
     operations = [
         "evidence_standardization",
         "artifact_generation",
@@ -74,7 +74,7 @@ def demo_payloads(count: int = 10) -> list[dict[str, Any]]:
         "replay_reference_capture",
         "consumer_handoff",
     ]
-    payloads: list[dict[str, Any]] = []
+    payloads: list[Any] = []
     for index in range(1, count + 1):
         operation = operations[(index - 1) % len(operations)]
         payloads.append(_mangled_demo_payload(index, operation))
@@ -110,12 +110,12 @@ def _canonical_body(index: int, operation: str) -> dict[str, Any]:
     }
 
 
-def _mangled_demo_payload(index: int, operation: str) -> dict[str, Any] | list[Any]:
+def _mangled_demo_payload(index: int, operation: str) -> Any:
     case_id = f"runtime-proof-{index:03d}"
     source = "GC_RUNTIME_EVIDENCE_PRODUCER"
     target = "SHAKTI_GOVERNANCE_CONSUMER"
     body = _canonical_body(index, operation)
-    variants: list[dict[str, Any] | list[Any]] = [
+    variants: list[Any] = [
         {
             "requestId": case_id,
             "origin": source,
@@ -203,20 +203,12 @@ def _mangled_demo_payload(index: int, operation: str) -> dict[str, Any] | list[A
                 "data": body,
             },
         },
-        {
-            "irrelevant_wrapper": {
-                "trace": {
-                    "runId": case_id,
-                },
-                "routing": {
-                    "producer": source,
-                    "sink": target,
-                },
-                "request": {
-                    "task": operation,
-                    "input": body,
-                },
-            }
-        },
+        (
+            f"Please process case id {case_id}. "
+            f"source system {source}. "
+            f"target system {target}. "
+            f"operation {operation}. "
+            "Payload should prove schema-free text extraction, replayability, lineage, and handover readiness."
+        ),
     ]
     return variants[(index - 1) % len(variants)]

@@ -124,6 +124,14 @@ def read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def read_input_payload(path: Path) -> Any:
+    text = path.read_text(encoding="utf-8")
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        return text
+
+
 def write_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(pretty_json(value) + "\n", encoding="utf-8")
@@ -188,7 +196,7 @@ def _input_extraction(payload: dict[str, Any], raw_payload: Any) -> dict[str, An
 
 
 def produce_evidence_run(input_path: Path, output_root: Path) -> Path:
-    raw_payload = read_json(input_path)
+    raw_payload = read_input_payload(input_path)
     payload = normalize_input(raw_payload)
     result = execute_payload(payload)
     timestamp = utc_timestamp()

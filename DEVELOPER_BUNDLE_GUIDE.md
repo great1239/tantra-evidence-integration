@@ -55,7 +55,7 @@ Every required bundle includes `execution_context` with the same six fields.
 
 ## Input Extraction
 
-`input.json` intentionally preserves the submitted payload, even when it is badly shaped. The canonical runtime fields are recorded in `input_extraction`.
+`input.json` intentionally preserves the submitted payload, even when it is badly shaped. The submitted payload may be canonical JSON, mangled JSON, a JSON string, or a raw text file. The canonical runtime fields are recorded in `input_extraction`.
 
 | Field | Meaning |
 | --- | --- |
@@ -71,6 +71,8 @@ Every required bundle includes `execution_context` with the same six fields.
 | `canonical_fields.payload_sha256` | SHA-256 hash of the extracted runtime payload. |
 | `field_sources` | JSON paths and matched keys used to extract each canonical field. |
 | `missing_fields` | Canonical fields that could not be extracted. Successful proof runs should have an empty list. |
+
+For schema-free text, `field_sources` uses markers such as `<plain_text:id_pattern>`, `<plain_text:from>`, `<plain_text:to>`, or `<plain_text:known_operation>` so a reviewer can see exactly which deterministic text rule supplied the field.
 
 ## Evidence Bundle
 

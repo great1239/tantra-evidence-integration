@@ -90,6 +90,94 @@ COMMON_CONTAINERS = {
     "systems",
 }
 
+KNOWN_OPERATIONS = [
+    "evidence_standardization",
+    "artifact_generation",
+    "lineage_capture",
+    "replay_reference_capture",
+    "consumer_handoff",
+]
+
+TEXT_FIELD_LABELS = {
+    "case_id": [
+        "case id",
+        "case",
+        "run id",
+        "run",
+        "request id",
+        "request",
+        "ticket id",
+        "ticket",
+        "record id",
+        "record",
+        "execution id",
+        "execution",
+    ],
+    "source_system": [
+        "source system",
+        "source",
+        "from",
+        "origin",
+        "producer",
+        "submitted by",
+        "submitted from",
+    ],
+    "target_system": [
+        "target system",
+        "target",
+        "to",
+        "destination",
+        "consumer",
+        "recipient",
+        "sink",
+    ],
+    "operation": [
+        "operation",
+        "action",
+        "command",
+        "workflow",
+        "intent",
+        "task",
+        "using",
+        "for",
+    ],
+}
+
+TEXT_STOP_WORDS = [
+    "from",
+    "to",
+    "for",
+    "using",
+    "with",
+    "operation",
+    "action",
+    "command",
+    "workflow",
+    "intent",
+    "task",
+    "target",
+    "consumer",
+    "recipient",
+    "destination",
+    "source",
+    "producer",
+    "origin",
+    "payload",
+    "body",
+    "data",
+    "case",
+    "run",
+    "request",
+    "ticket",
+    "record",
+    "execution",
+]
+
+TEXT_ID_PATTERN = re.compile(
+    r"\b(?:runtime-proof|proof|case|ticket|record|request|run|exec|execution)[-_][A-Za-z0-9][A-Za-z0-9_.:-]*\b",
+    re.IGNORECASE,
+)
+
 
 def normalize_input(raw: Any) -> dict[str, Any]:
     """Extract the canonical runtime input fields from canonical or loose JSON."""
@@ -97,6 +185,7 @@ def normalize_input(raw: Any) -> dict[str, Any]:
         return dict(raw)
 
     flattened = list(_walk(raw))
+    text_candidates = list(_text_candidates(raw))
     normalized: dict[str, Any] = {}
     field_sources: dict[str, dict[str, str]] = {}
 
@@ -106,6 +195,15 @@ def normalize_input(raw: Any) -> dict[str, Any]:
             path, value, key = match
             normalized[field] = str(value)
             field_sources[field] = {"path": path, "matched_key": key}
+
+    for field in ["case_id", "source_system", "target_system", "operation"]:
+        if field in normalized:
+            continue
+        text_match = _find_text_match(field, text_candidates)
+        if text_match is not None:
+            path, value, label = text_match
+            normalized[field] = value
+            field_sources[field] = {"path": path, "matched_key": label}
 
     payload_match = _find_best_payload_match(flattened)
     if payload_match is not None:
@@ -152,6 +250,17 @@ def _walk(value: Any, path: str = "$"):
             yield from _walk(item, item_path)
 
 
+def _text_candidates(value: Any, path: str = "$"):
+    if isinstance(value, str):
+        yield path, value
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            yield from _text_candidates(item, f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            yield from _text_candidates(item, f"{path}[{index}]")
+
+
 def _find_best_scalar_match(field: str, flattened: list[tuple[str, str, Any]]) -> tuple[str, Any, str] | None:
     aliases = _alias_set(field)
     matches = []
@@ -180,6 +289,98 @@ def _find_best_payload_match(flattened: list[tuple[str, str, Any]]) -> tuple[str
         return None
     _, path, value, key = sorted(matches, key=lambda item: item[0])[0]
     return path, value, key
+
+
+def _find_text_match(field: str, candidates: list[tuple[str, str]]) -> tuple[str, str, str] | None:
+    matches = []
+    for path, text in candidates:
+        extracted = _extract_field_from_text(field, text)
+        if extracted is None:
+            continue
+        value, label = extracted
+        matches.append((_text_score(path, field, label), path, value, label))
+    if not matches:
+        return None
+    _, path, value, label = sorted(matches, key=lambda item: item[0])[0]
+    return path, value, label
+
+
+def _extract_field_from_text(field: str, text: str) -> tuple[str, str] | None:
+    cleaned = " ".join(text.split())
+    if not cleaned:
+        return None
+
+    if field == "operation":
+        operation = _extract_known_operation(cleaned)
+        if operation is not None:
+            return operation, "<plain_text:known_operation>"
+
+    if field == "case_id":
+        id_match = TEXT_ID_PATTERN.search(cleaned)
+        if id_match:
+            return _clean_text_value(id_match.group(0)), "<plain_text:id_pattern>"
+
+    for label in TEXT_FIELD_LABELS[field]:
+        value = _capture_labeled_text_value(cleaned, label)
+        if value is None:
+            continue
+        if field == "operation":
+            operation = _operation_from_value(value)
+            return operation, f"<plain_text:{label}>"
+        return _clean_text_value(value), f"<plain_text:{label}>"
+    return None
+
+
+def _extract_known_operation(text: str) -> str | None:
+    normalized = re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
+    padded = f"_{normalized}_"
+    for operation in KNOWN_OPERATIONS:
+        if f"_{operation}_" in padded:
+            return operation
+    return None
+
+
+def _operation_from_value(value: str) -> str:
+    known_operation = _extract_known_operation(value)
+    if known_operation is not None:
+        return known_operation
+    return _clean_text_value(value).lower().replace("-", "_").replace(" ", "_")
+
+
+def _capture_labeled_text_value(text: str, label: str) -> str | None:
+    label_pattern = re.escape(label).replace(r"\ ", r"\s+")
+    quoted = re.search(
+        rf"\b{label_pattern}\b\s*(?:is|as|=|:|-)?\s*[\"']([^\"']+)[\"']",
+        text,
+        re.IGNORECASE,
+    )
+    if quoted:
+        return quoted.group(1)
+
+    stop_pattern = "|".join(re.escape(word).replace(r"\ ", r"\s+") for word in TEXT_STOP_WORDS if word != label)
+    bare = re.search(
+        rf"\b{label_pattern}\b\s*(?:is|as|=|:|-)?\s+(.+?)(?=\s+(?:{stop_pattern})\b|[.;,\n]|$)",
+        text,
+        re.IGNORECASE,
+    )
+    if not bare:
+        return None
+    value = bare.group(1).strip()
+    return value if value else None
+
+
+def _clean_text_value(value: str) -> str:
+    return value.strip().strip("\"'`.,;:()[]{}")
+
+
+def _text_score(path: str, field: str, label: str) -> tuple[int, int, str]:
+    label_rank = 0 if label == f"<plain_text:{field}>" else 1
+    if field == "case_id" and label == "<plain_text:id_pattern>":
+        label_rank = 0
+    if field == "operation" and label == "<plain_text:known_operation>":
+        label_rank = 0
+    depth = path.count(".") + path.count("[")
+    return (label_rank, depth, path)
 
 
 def _payload_score(path: str, key: str) -> tuple[int, int, int, str]:

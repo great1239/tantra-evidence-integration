@@ -91,6 +91,40 @@ class RuntimeEvidenceTests(unittest.TestCase):
             ["case_id", "source_system", "target_system", "operation"],
         )
 
+    def test_extracts_canonical_fields_from_plain_english_string(self):
+        raw = (
+            "Run runtime-proof-011 from GC_RUNTIME_EVIDENCE_PRODUCER "
+            "to SHAKTI_GOVERNANCE_CONSUMER for artifact_generation with payload signals complete."
+        )
+        normalized = normalize_input(raw)
+        self.assertEqual(normalized["case_id"], "runtime-proof-011")
+        self.assertEqual(normalized["source_system"], "GC_RUNTIME_EVIDENCE_PRODUCER")
+        self.assertEqual(normalized["target_system"], "SHAKTI_GOVERNANCE_CONSUMER")
+        self.assertEqual(normalized["operation"], "artifact_generation")
+        self.assertEqual(normalized["payload"], raw)
+        self.assertEqual(normalized["_normalization"]["missing_fields"], [])
+
+    def test_raw_text_file_with_plain_english_data_produces_successful_package(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            input_path = root / "plain-request.txt"
+            input_path.write_text(
+                "Please process case id runtime-proof-012. "
+                "source system GC_RUNTIME_EVIDENCE_PRODUCER. "
+                "target system SHAKTI_GOVERNANCE_CONSUMER. "
+                "operation lineage capture.",
+                encoding="utf-8",
+            )
+            run_dir = produce_evidence_run(input_path, root / "runs")
+            output = json.loads((run_dir / "output.json").read_text(encoding="utf-8"))
+            evidence = json.loads((run_dir / "evidence_bundle.json").read_text(encoding="utf-8"))
+            raw_input = json.loads((run_dir / "input.json").read_text(encoding="utf-8"))
+            self.assertEqual(output["execution_status"], "success")
+            self.assertEqual(output["missing_required_fields"], [])
+            self.assertEqual(evidence["input_extraction"]["canonical_fields"]["case_id"], "runtime-proof-012")
+            self.assertEqual(evidence["input_extraction"]["missing_fields"], [])
+            self.assertIsInstance(raw_input, str)
+
     def test_produce_run_from_loose_schema_succeeds_when_extractable(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -30,7 +30,7 @@ The preferred canonical input payload includes:
 - `operation`
 - `payload`
 
-The producer also accepts noncanonical JSON when these fields can be extracted from aliases or nested objects.
+The producer also accepts noncanonical JSON when these fields can be extracted from aliases or nested objects. It can also accept a raw text file or JSON string when the sentence contains recognizable case, source, target, and operation details.
 
 Examples of accepted aliases:
 
@@ -41,6 +41,12 @@ Examples of accepted aliases:
 - `data`, `body`, `content`, `event` -> `payload`
 
 Only fields that cannot be extracted are listed as missing. The producer preserves the raw submitted payload in `input.json` and writes extracted canonical field details into `input_extraction` inside each required bundle.
+
+Plain English example:
+
+```text
+Please process case id runtime-proof-012. source system GC_RUNTIME_EVIDENCE_PRODUCER. target system SHAKTI_GOVERNANCE_CONSUMER. operation lineage capture.
+```
 
 ## Architecture
 

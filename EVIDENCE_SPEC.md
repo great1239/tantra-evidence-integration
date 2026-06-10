@@ -107,6 +107,8 @@ Supported extraction aliases include:
 
 The extractor searches top-level fields and nested objects such as `metadata`, `meta`, `context`, `headers`, `envelope`, `request`, `event`, `execution`, and `systems`.
 
+The producer also accepts raw text files or JSON strings. When plain English text contains recognizable values such as `case id runtime-proof-012`, `from GC_RUNTIME_EVIDENCE_PRODUCER`, `to SHAKTI_GOVERNANCE_CONSUMER`, or `operation artifact_generation`, deterministic text patterns extract the canonical fields before missing-field fallback.
+
 If a field cannot be extracted, it is listed in `input_extraction.missing_fields` in each bundle. Missing fields are used only after extraction fails.
 
 ## Bundle Formats

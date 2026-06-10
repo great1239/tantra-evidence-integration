@@ -18,7 +18,7 @@
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "lineage_capture executed with status success.",
     "what_produced_it": "runtime_evidence_producer.py",
-    "when_it_happened": "2026-06-10T10:01:31Z",
+    "when_it_happened": "2026-06-10T10:19:06Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "execution_id": "exec_cf47ed09f5ff120ce5d7",
@@ -68,6 +68,6 @@
   "schema_version": "1.0.0",
   "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-10T10:01:31Z",
+  "timestamp": "2026-06-10T10:19:06Z",
   "trace_id": "trace_aed21d0f4a7b68a2fef3"
 }

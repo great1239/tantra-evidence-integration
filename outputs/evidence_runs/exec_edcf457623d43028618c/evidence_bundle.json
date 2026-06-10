@@ -3,7 +3,7 @@
   "artifacts": {
     "handover": {
       "reference": "handover_bundle.json",
-      "sha256": "e84aec7a70c14fcc53f380165b7e29b80eafe0a194dd656ddbac5acc9d674d80"
+      "sha256": "268a9ce6f0faa234659f684f083d20d1eb0e71b03b10fc7e4d3c8f9f3bd62e58"
     },
     "input": {
       "reference": "input.json",
@@ -11,7 +11,7 @@
     },
     "lineage": {
       "reference": "lineage_bundle.json",
-      "sha256": "8b5be043926bc310aa89c0346bd9df33841ca2beee6140a27584b0bf6c4ad723"
+      "sha256": "3a1ea01f61787875b730ec974469cf5eb137d314f86484746ab35c8b3fffad84"
     },
     "output": {
       "reference": "output.json",
@@ -19,7 +19,7 @@
     },
     "replay": {
       "reference": "replay_bundle.json",
-      "sha256": "28f4ac8105e2fd45b2c0dab56e82fd9c0f2c9c915127cf31baf2ddce33eaedef"
+      "sha256": "869114a34d92d7b7cc838fae6142bdb4b30fb62bc2c5570e9ed0ffcd0c31249c"
     }
   },
   "confidence": 0.9,
@@ -34,7 +34,7 @@
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "replay_reference_capture executed with status success.",
     "what_produced_it": "runtime_evidence_producer.py",
-    "when_it_happened": "2026-06-10T10:01:31Z",
+    "when_it_happened": "2026-06-10T10:19:06Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "execution_id": "exec_edcf457623d43028618c",
@@ -93,10 +93,10 @@
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "replay_reference_capture executed with status success.",
     "what_produced_it": "runtime_evidence_producer.py",
-    "when_it_happened": "2026-06-10T10:01:31Z",
+    "when_it_happened": "2026-06-10T10:19:06Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-10T10:01:31Z",
+  "timestamp": "2026-06-10T10:19:06Z",
   "trace_id": "trace_5f375f278f1b70329fbd"
 }

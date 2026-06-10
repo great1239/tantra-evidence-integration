@@ -22,53 +22,53 @@
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "consumer_handoff executed with status success.",
     "what_produced_it": "runtime_evidence_producer.py",
-    "when_it_happened": "2026-06-10T10:01:31Z",
+    "when_it_happened": "2026-06-10T10:19:07Z",
     "where_it_happened": "runtime-evidence-producer"
   },
-  "execution_id": "exec_f971aa54291cbdb6c44e",
+  "execution_id": "exec_709063d750fe9fbb4618",
   "input_extraction": {
     "canonical_fields": {
       "case_id": "runtime-proof-010",
       "operation": "consumer_handoff",
-      "payload_sha256": "54c98379053f6c4975a2014e7e0ce5454108d251bd830526f69a571bf47f1972",
-      "payload_type": "dict",
+      "payload_sha256": "31b3596915c7d2e42512b20bce9ea7806cb747c50ad6776b0f9687754e3ed55b",
+      "payload_type": "str",
       "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
       "target_system": "SHAKTI_GOVERNANCE_CONSUMER"
     },
     "field_sources": {
       "case_id": {
-        "matched_key": "runId",
-        "path": "$.irrelevant_wrapper.trace.runId"
+        "matched_key": "<plain_text:id_pattern>",
+        "path": "$"
       },
       "operation": {
-        "matched_key": "task",
-        "path": "$.irrelevant_wrapper.request.task"
+        "matched_key": "<plain_text:known_operation>",
+        "path": "$"
       },
       "payload": {
-        "matched_key": "request",
-        "path": "$.irrelevant_wrapper.request"
+        "matched_key": "<derived_from_raw_input>",
+        "path": "$"
       },
       "source_system": {
-        "matched_key": "producer",
-        "path": "$.irrelevant_wrapper.routing.producer"
+        "matched_key": "<plain_text:source system>",
+        "path": "$"
       },
       "target_system": {
-        "matched_key": "sink",
-        "path": "$.irrelevant_wrapper.routing.sink"
+        "matched_key": "<plain_text:target system>",
+        "path": "$"
       }
     },
     "input_reference": "input.json",
     "input_shape": "noncanonical_extracted",
     "missing_fields": [],
-    "raw_input_sha256": "558e7123e1eedd45e86bbd3fcba10919a8a140209a509f401efe4cbc56fc75e6",
-    "raw_input_type": "dict"
+    "raw_input_sha256": "31b3596915c7d2e42512b20bce9ea7806cb747c50ad6776b0f9687754e3ed55b",
+    "raw_input_type": "str"
   },
-  "lineage_reference": "lineage_8057d2a494ac3145a086",
+  "lineage_reference": "lineage_64655850a92f6bd9f5e9",
   "nodes": [
     {
       "id": "input_payload",
       "reference": "input.json",
-      "sha256": "0899463692cf3ce328a305ba4c1a1f4ef17661c8ef505a6916b626cf463074a6",
+      "sha256": "ef80eb5c054cc7de0ae125a5e3dd767f711d480e87f13e6168a60798e043461c",
       "type": "payload"
     },
     {
@@ -80,7 +80,7 @@
     {
       "id": "runtime_output",
       "reference": "output.json",
-      "sha256": "d09fc5a715d4524aa4ff8a1684221a0e5e93e32ad4244ad42577b2297a6dfb87",
+      "sha256": "0fd169e539b59379e1bb3f066f60fcd0d12abfa2b43516e7e28f5ff9b8dd64cc",
       "type": "artifact"
     },
     {
@@ -112,6 +112,6 @@
   "schema_version": "1.0.0",
   "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-10T10:01:31Z",
-  "trace_id": "trace_d880149e64efc229c97c"
+  "timestamp": "2026-06-10T10:19:07Z",
+  "trace_id": "trace_b996d7b5e3d19d0967f0"
 }

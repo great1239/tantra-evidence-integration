@@ -32,7 +32,7 @@ Generate one bundle from an input payload:
 python runtime_evidence_producer.py run --input sample_inputs/runtime-proof-001.json --out outputs/evidence_runs
 ```
 
-Inputs are normalized before execution. Canonical fields are extracted from common aliases such as `id`, `caseId`, `from`, `to`, `action`, `type`, `data`, and `body`; missing fields are recorded only when extraction is impossible. Generated proof `input.json` files preserve the raw/mangled submitted input, while each bundle records extraction details in `input_extraction`.
+Inputs are normalized before execution. Canonical fields are extracted from common aliases such as `id`, `caseId`, `from`, `to`, `action`, `type`, `data`, and `body`. The producer also extracts fields from schema-free plain English text when it contains recognizable case, source, target, and operation details. Missing fields are recorded only when extraction is impossible. Generated proof `input.json` files preserve the raw/mangled submitted input, while each bundle records extraction details in `input_extraction`.
 
 ## Developer Handoff
 
