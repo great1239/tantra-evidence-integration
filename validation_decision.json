@@ -1,0 +1,177 @@
+{
+  "adapter": {
+    "name": "shakti-consumer-adapter",
+    "version": "1.0.0"
+  },
+  "decision": "APPROVED",
+  "decision_id": "validation_decision_31b41e7df3701143e179",
+  "deterministic": true,
+  "evidence": {
+    "reference": "outputs/evidence_runs/exec_709063d750fe9fbb4618/evidence_bundle.json",
+    "sha256": "843e7fb917bdf0cbddadf925817a464470d68f7bc66342a9f8d8861455f2b040"
+  },
+  "execution_id": "exec_709063d750fe9fbb4618",
+  "governance_status": "VALIDATED",
+  "reason_codes": [],
+  "replay_reconstruction": "available",
+  "schema_version": "1.0.0",
+  "trace_id": "trace_b996d7b5e3d19d0967f0",
+  "validation_checks": [
+    {
+      "actual": "complete",
+      "expected": [
+        "execution_id",
+        "trace_id",
+        "contract_version",
+        "schema_version",
+        "timestamp",
+        "source_system",
+        "target_system",
+        "payload_reference",
+        "artifact_reference",
+        "replay_reference",
+        "execution_status",
+        "confidence"
+      ],
+      "name": "schema_required_fields",
+      "status": "pass"
+    },
+    {
+      "actual": "exec_709063d750fe9fbb4618",
+      "expected": "non-empty string",
+      "name": "schema_execution_id_present",
+      "status": "pass"
+    },
+    {
+      "actual": "trace_b996d7b5e3d19d0967f0",
+      "expected": "non-empty string",
+      "name": "schema_trace_id_present",
+      "status": "pass"
+    },
+    {
+      "actual": "exec_709063d750fe9fbb4618",
+      "expected": "non-empty string",
+      "name": "schema_artifact_reference_present",
+      "status": "pass"
+    },
+    {
+      "actual": "replay_06a6cb658d8cf6052abc",
+      "expected": "non-empty string",
+      "name": "schema_replay_reference_present",
+      "status": "pass"
+    },
+    {
+      "actual": "shakti-runtime-evidence/v1",
+      "expected": "shakti-runtime-evidence/v1",
+      "name": "contract_version",
+      "status": "pass"
+    },
+    {
+      "actual": "1.0.0",
+      "expected": "1.0.0",
+      "name": "schema_version",
+      "status": "pass"
+    },
+    {
+      "actual": "success",
+      "expected": "success",
+      "name": "execution_status_success",
+      "status": "pass"
+    },
+    {
+      "actual": "float",
+      "expected": "number",
+      "name": "confidence_available",
+      "status": "pass"
+    },
+    {
+      "actual": 1.0,
+      "expected": ">=0.75",
+      "name": "confidence_threshold",
+      "status": "pass"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "self_contained_consumer_package",
+      "status": "pass"
+    },
+    {
+      "actual": "input.json",
+      "detail": "hash verified",
+      "name": "payload_reference_integrity",
+      "status": "pass"
+    },
+    {
+      "actual": "dict",
+      "expected": "object",
+      "name": "artifact_index_present",
+      "status": "pass"
+    },
+    {
+      "actual": "input.json",
+      "detail": "hash verified",
+      "name": "artifact_integrity_input",
+      "status": "pass"
+    },
+    {
+      "actual": "output.json",
+      "detail": "hash verified",
+      "name": "artifact_integrity_output",
+      "status": "pass"
+    },
+    {
+      "actual": "lineage_bundle.json",
+      "detail": "hash verified",
+      "name": "artifact_integrity_lineage",
+      "status": "pass"
+    },
+    {
+      "actual": "replay_bundle.json",
+      "detail": "hash verified",
+      "name": "artifact_integrity_replay",
+      "status": "pass"
+    },
+    {
+      "actual": "handover_bundle.json",
+      "detail": "hash verified",
+      "name": "artifact_integrity_handover",
+      "status": "pass"
+    },
+    {
+      "actual": "replay_bundle.json",
+      "name": "replay_bundle_present",
+      "status": "pass"
+    },
+    {
+      "actual": "replay_06a6cb658d8cf6052abc",
+      "expected": "replay_06a6cb658d8cf6052abc",
+      "name": "replay_reference_consistency",
+      "status": "pass"
+    },
+    {
+      "actual": "python runtime_evidence_producer.py run --input outputs/evidence_runs/exec_709063d750fe9fbb4618/input.json --out outputs/evidence_runs",
+      "expected": "runtime_evidence_producer.py run",
+      "name": "replay_command_entrypoint",
+      "status": "pass"
+    },
+    {
+      "actual": "runtime_evidence_producer.py",
+      "expected": "runtime_evidence_producer.py",
+      "name": "replay_runtime_entrypoint",
+      "status": "pass"
+    },
+    {
+      "actual": "input.json",
+      "detail": "hash verified",
+      "name": "replay_input_integrity",
+      "status": "pass"
+    },
+    {
+      "actual": "output.json",
+      "detail": "hash verified",
+      "name": "replay_expected_output_integrity",
+      "status": "pass"
+    }
+  ]
+}

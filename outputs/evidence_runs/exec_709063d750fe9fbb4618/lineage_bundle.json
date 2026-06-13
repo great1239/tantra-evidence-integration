@@ -22,7 +22,7 @@
     "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
     "what_happened": "consumer_handoff executed with status success.",
     "what_produced_it": "runtime_evidence_producer.py",
-    "when_it_happened": "2026-06-10T10:19:07Z",
+    "when_it_happened": "2026-06-12T12:14:02Z",
     "where_it_happened": "runtime-evidence-producer"
   },
   "execution_id": "exec_709063d750fe9fbb4618",
@@ -112,6 +112,6 @@
   "schema_version": "1.0.0",
   "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-10T10:19:07Z",
+  "timestamp": "2026-06-12T12:14:02Z",
   "trace_id": "trace_b996d7b5e3d19d0967f0"
 }

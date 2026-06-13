@@ -49,6 +49,23 @@ This file is the single source of truth for edge-case behavior and failure handl
 | Replay output hash mismatch | Existing package is not replay-equivalent | Manual replay comparison or consumer replay check | Investigate runtime drift before accepting. |
 | Unsupported `contract_version` or `schema_version` | Package may be well formed but incompatible | `evidence_bundle.json` | Consumer should reject or route to a compatible adapter. |
 
+## TANTRA Consumer Failure Cases
+
+| Failure case | Where detected | Output status | Consumer action |
+| --- | --- | --- | --- |
+| Evidence bundle is not a JSON object | `shakti_consumer_adapter.py` | `validation_decision.json.decision: REJECTED` | Reject before governance registration. |
+| Evidence bundle is missing a canonical required field | `schema_required_fields` check in `validation_decision.json` | `REJECTED` | Regenerate evidence or fix producer output. |
+| `execution_id`, `trace_id`, `artifact_reference`, or `replay_reference` is missing or empty | SHAKTI schema presence checks | `REJECTED` | Do not propagate incomplete evidence. |
+| Unsupported contract or schema version | SHAKTI version checks | `REJECTED` | Route to a compatible adapter or reject. |
+| Evidence execution status is not `success` | SHAKTI execution status check | `REJECTED` | Treat as failed runtime evidence. |
+| Evidence confidence is missing or below `0.75` | SHAKTI confidence checks | `REJECTED` | Require human review or improved source evidence. |
+| Package is not marked self-contained | SHAKTI consumer compatibility check | `REJECTED` | Do not hand off until artifacts are bundled. |
+| Payload or artifact hash mismatch | SHAKTI integrity checks | `REJECTED` | Do not consume; regenerate from source input. |
+| Replay bundle is missing or replay metadata is incomplete | SHAKTI replay checks | `REJECTED` | Do not accept until replay reconstruction is possible. |
+| SHAKTI rejects validation | `tms_convergence_emitter.py` | `tms_convergence_status.json.status: FAILED` | Stop convergence; inspect SHAKTI reason codes. |
+| SHAKTI approves but MDU registration is not registered | TMS convergence derivation | `PARTIAL` | Inspect MDU registration output before declaring convergence. |
+| SHAKTI approves but lineage is not reconstructable | TMS convergence derivation | `PARTIAL` | Restore missing artifacts or registration references. |
+
 ## Failure Categories
 
 - Pre-generation failures: missing or unreadable input file. No evidence package is produced.

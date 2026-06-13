@@ -1,0 +1,27 @@
+{
+  "chain_id": "tantra_chain_2df59275e834788ed8da",
+  "convergence_status": "CONVERGED",
+  "decision": "APPROVED",
+  "deterministic": true,
+  "evidence_run": "outputs/evidence_runs/exec_709063d750fe9fbb4618",
+  "execution_id": "exec_709063d750fe9fbb4618",
+  "input_mode": "generated_sample_evidence",
+  "outputs": {
+    "governance_record": "governance_record.json",
+    "lineage_chain": "lineage_chain.json",
+    "lineage_registration": "lineage_registration.json",
+    "registration_reference": "registration_reference.json",
+    "tms_convergence_status": "tms_convergence_status.json",
+    "validation_decision": "validation_decision.json"
+  },
+  "proofs": {
+    "ansh": "ANSH_INTEGRATION_PROOF.md",
+    "governance": "GOVERNANCE_REGISTRATION_PROOF.md",
+    "shakti": "SHAKTI_CONSUMPTION_PROOF.md",
+    "tantra": "TANTRA_CHAIN_PROOF.md",
+    "tms": "TMS_CONVERGENCE_PROOF.md"
+  },
+  "sample_input": "sample_inputs/runtime-proof-010.json",
+  "source_evidence": "outputs/evidence_runs/exec_709063d750fe9fbb4618/evidence_bundle.json",
+  "trace_id": "trace_b996d7b5e3d19d0967f0"
+}

@@ -1,0 +1,31 @@
+{
+  "convergence_id": "tms_convergence_25ae37b577a517bd3d13",
+  "deterministic": true,
+  "emitter": {
+    "name": "tms-convergence-emitter",
+    "version": "1.0.0"
+  },
+  "execution_id": "exec_709063d750fe9fbb4618",
+  "inputs": {
+    "lineage_chain": {
+      "reference": "lineage_chain.json",
+      "sha256": "25103b2cee02488dcc84d2352fb49a7794eacbad586be65df7bf41b58722fe41"
+    },
+    "lineage_registration": {
+      "reference": "lineage_registration.json",
+      "sha256": "523220370e5e8a2bece85d113902e952a9826ce2749fc9dc4ce74724f4550b18"
+    },
+    "validation_decision": {
+      "reference": "validation_decision.json",
+      "sha256": "f6b5e7598c33dcee6f5267bc4f5d68be3ae06facdb2d29abf3d15f847c8ae443"
+    }
+  },
+  "reason_codes": [],
+  "status": "CONVERGED",
+  "trace_id": "trace_b996d7b5e3d19d0967f0",
+  "valid_statuses": [
+    "CONVERGED",
+    "FAILED",
+    "PARTIAL"
+  ]
+}

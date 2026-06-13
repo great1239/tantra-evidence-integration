@@ -1,0 +1,44 @@
+{
+  "deterministic": true,
+  "execution_id": "exec_709063d750fe9fbb4618",
+  "governance_record_id": "governance_record_0880fc79c99cd640d7fa",
+  "mdu_registration_id": "mdu_registration_04cc65c006d2bf0b0ef3",
+  "query_keys": {
+    "execution_id": "exec_709063d750fe9fbb4618",
+    "governance_record_id": "governance_record_0880fc79c99cd640d7fa",
+    "registration_id": "shakti_registration_566291a7a9ecdf2fab0c",
+    "trace_id": "trace_b996d7b5e3d19d0967f0"
+  },
+  "registered_artifacts": [
+    {
+      "reference": "outputs/evidence_runs/exec_709063d750fe9fbb4618/input.json",
+      "role": "raw_runtime_input",
+      "sha256": "ef80eb5c054cc7de0ae125a5e3dd767f711d480e87f13e6168a60798e043461c",
+      "type": "input_artifact"
+    },
+    {
+      "reference": "outputs/evidence_runs/exec_709063d750fe9fbb4618/evidence_bundle.json",
+      "role": "validated_evidence",
+      "sha256": "843e7fb917bdf0cbddadf925817a464470d68f7bc66342a9f8d8861455f2b040",
+      "type": "evidence_bundle"
+    },
+    {
+      "reference": "governance_record.json",
+      "role": "shakti_validation_record",
+      "sha256": "c0030b2fe81307aaf52d5a113f53249eb7e4291e6fe04474aeb98bb41e4d1318",
+      "type": "governance_record"
+    },
+    {
+      "reference": "registration_reference.json",
+      "role": "shakti_registration_reference",
+      "sha256": "76e319e68ef00ca6ca8a9bfa93ba579094b6f53980c4417bec5e9fb145a25523",
+      "type": "consumer_registration"
+    }
+  ],
+  "registrar": {
+    "name": "mdu-lineage-registration",
+    "version": "1.0.0"
+  },
+  "registration_status": "REGISTERED",
+  "trace_id": "trace_b996d7b5e3d19d0967f0"
+}

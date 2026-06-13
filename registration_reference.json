@@ -1,0 +1,16 @@
+{
+  "consumer": "SHAKTI",
+  "deterministic": true,
+  "execution_id": "exec_709063d750fe9fbb4618",
+  "governance_record": {
+    "reference": "governance_record.json",
+    "sha256": "c0030b2fe81307aaf52d5a113f53249eb7e4291e6fe04474aeb98bb41e4d1318"
+  },
+  "registration_id": "shakti_registration_566291a7a9ecdf2fab0c",
+  "registration_status": "REGISTERED",
+  "trace_id": "trace_b996d7b5e3d19d0967f0",
+  "validation_decision": {
+    "reference": "validation_decision.json",
+    "sha256": "f6b5e7598c33dcee6f5267bc4f5d68be3ae06facdb2d29abf3d15f847c8ae443"
+  }
+}

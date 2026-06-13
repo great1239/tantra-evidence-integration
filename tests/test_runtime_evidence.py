@@ -7,6 +7,9 @@ from runtime_evidence.canonical import stable_id
 from runtime_evidence.producer import produce_evidence_run, validate_evidence_root, write_json
 from runtime_evidence.reference_runtime import demo_payloads
 from runtime_evidence.normalizer import normalize_input
+from run_tantra_chain import run_chain, run_operational_chain
+from shakti_consumer_adapter import consume_evidence
+from tms_convergence_emitter import emit_convergence
 
 
 class RuntimeEvidenceTests(unittest.TestCase):
@@ -259,6 +262,272 @@ class RuntimeEvidenceTests(unittest.TestCase):
             _, errors = validate_evidence_root(root / "runs")
             self.assertTrue(any("replay_bundle.json trace_id does not match" in error for error in errors))
             self.assertTrue(any("execution.log status does not match" in error for error in errors))
+
+    def test_shakti_adapter_outputs_are_deterministic_for_same_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            input_path = root / "plain-request.txt"
+            input_path.write_text(
+                "Please process case id runtime-proof-201. "
+                "source system GC_RUNTIME_EVIDENCE_PRODUCER. "
+                "target system SHAKTI_GOVERNANCE_CONSUMER. "
+                "operation consumer handoff.",
+                encoding="utf-8",
+            )
+            run_dir = produce_evidence_run(input_path, root / "runs")
+            evidence_path = run_dir / "evidence_bundle.json"
+
+            first = root / "first"
+            second = root / "second"
+            consume_evidence(evidence_path, first)
+            consume_evidence(evidence_path, second)
+
+            for name in ["validation_decision.json", "governance_record.json", "registration_reference.json"]:
+                self.assertEqual(
+                    json.loads((first / name).read_text(encoding="utf-8")),
+                    json.loads((second / name).read_text(encoding="utf-8")),
+                )
+
+    def test_shakti_adapter_rejects_invalid_contract_version(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            input_path = root / "plain-request.txt"
+            input_path.write_text(
+                "Please process case id runtime-proof-301. "
+                "source system GC_RUNTIME_EVIDENCE_PRODUCER. "
+                "target system SHAKTI_GOVERNANCE_CONSUMER. "
+                "operation consumer handoff.",
+                encoding="utf-8",
+            )
+            run_dir = produce_evidence_run(input_path, root / "runs")
+            evidence_path = run_dir / "evidence_bundle.json"
+            evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+            evidence["contract_version"] = "unsupported-contract/v0"
+            write_json(evidence_path, evidence)
+
+            consume_evidence(evidence_path, root / "tantra")
+            decision = json.loads((root / "tantra" / "validation_decision.json").read_text(encoding="utf-8"))
+            registration = json.loads((root / "tantra" / "registration_reference.json").read_text(encoding="utf-8"))
+
+            self.assertEqual(decision["decision"], "REJECTED")
+            self.assertIn("contract_version", decision["reason_codes"])
+            self.assertEqual(registration["registration_status"], "REJECTED")
+
+    def test_shakti_adapter_rejects_missing_required_schema_fields(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            input_path = root / "plain-request.txt"
+            input_path.write_text(
+                "Please process case id runtime-proof-302. "
+                "source system GC_RUNTIME_EVIDENCE_PRODUCER. "
+                "target system SHAKTI_GOVERNANCE_CONSUMER. "
+                "operation consumer handoff.",
+                encoding="utf-8",
+            )
+            run_dir = produce_evidence_run(input_path, root / "runs")
+            evidence_path = run_dir / "evidence_bundle.json"
+            evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+            del evidence["trace_id"]
+            write_json(evidence_path, evidence)
+
+            consume_evidence(evidence_path, root / "tantra")
+            decision = json.loads((root / "tantra" / "validation_decision.json").read_text(encoding="utf-8"))
+
+            self.assertEqual(decision["decision"], "REJECTED")
+            self.assertIn("schema_required_fields", decision["reason_codes"])
+            self.assertIn("schema_trace_id_present", decision["reason_codes"])
+
+    def test_shakti_adapter_rejects_artifact_integrity_mismatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            input_path = root / "plain-request.txt"
+            input_path.write_text(
+                "Please process case id runtime-proof-303. "
+                "source system GC_RUNTIME_EVIDENCE_PRODUCER. "
+                "target system SHAKTI_GOVERNANCE_CONSUMER. "
+                "operation artifact generation.",
+                encoding="utf-8",
+            )
+            run_dir = produce_evidence_run(input_path, root / "runs")
+            write_json(run_dir / "output.json", {"tampered": True})
+
+            consume_evidence(run_dir / "evidence_bundle.json", root / "tantra")
+            decision = json.loads((root / "tantra" / "validation_decision.json").read_text(encoding="utf-8"))
+
+            self.assertEqual(decision["decision"], "REJECTED")
+            self.assertIn("artifact_integrity_output", decision["reason_codes"])
+            self.assertIn("replay_expected_output_integrity", decision["reason_codes"])
+
+    def test_shakti_adapter_rejects_missing_replay_metadata(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            input_path = root / "plain-request.txt"
+            input_path.write_text(
+                "Please process case id runtime-proof-304. "
+                "source system GC_RUNTIME_EVIDENCE_PRODUCER. "
+                "target system SHAKTI_GOVERNANCE_CONSUMER. "
+                "operation replay validation.",
+                encoding="utf-8",
+            )
+            run_dir = produce_evidence_run(input_path, root / "runs")
+            replay_path = run_dir / "replay_bundle.json"
+            replay = json.loads(replay_path.read_text(encoding="utf-8"))
+            del replay["replay_inputs"]
+            write_json(replay_path, replay)
+
+            consume_evidence(run_dir / "evidence_bundle.json", root / "tantra")
+            decision = json.loads((root / "tantra" / "validation_decision.json").read_text(encoding="utf-8"))
+
+            self.assertEqual(decision["decision"], "REJECTED")
+            self.assertIn("artifact_integrity_replay", decision["reason_codes"])
+            self.assertIn("replay_input_integrity", decision["reason_codes"])
+
+    def test_tms_emits_partial_when_mdu_registration_does_not_complete(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_json(
+                root / "validation_decision.json",
+                {
+                    "decision": "APPROVED",
+                    "decision_id": "validation_decision_test",
+                    "execution_id": "exec_test",
+                    "trace_id": "trace_test",
+                },
+            )
+            write_json(
+                root / "lineage_registration.json",
+                {
+                    "mdu_registration_id": "mdu_registration_test",
+                    "registration_status": "REJECTED",
+                    "trace_id": "trace_test",
+                },
+            )
+            write_json(
+                root / "lineage_chain.json",
+                {
+                    "chain_id": "lineage_chain_test",
+                    "reconstruction": {"reconstructable": True},
+                    "trace_id": "trace_test",
+                },
+            )
+
+            output_path = emit_convergence(
+                root / "validation_decision.json",
+                root / "lineage_registration.json",
+                root / "lineage_chain.json",
+                root,
+            )
+            convergence = json.loads(output_path.read_text(encoding="utf-8"))
+
+            self.assertEqual(convergence["status"], "PARTIAL")
+            self.assertIn("MDU_REGISTRATION_NOT_REGISTERED", convergence["reason_codes"])
+
+    def test_tms_emits_failed_when_shakti_rejects_validation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_json(
+                root / "validation_decision.json",
+                {
+                    "decision": "REJECTED",
+                    "decision_id": "validation_decision_test",
+                    "execution_id": "exec_test",
+                    "trace_id": "trace_test",
+                },
+            )
+            write_json(
+                root / "lineage_registration.json",
+                {
+                    "mdu_registration_id": "mdu_registration_test",
+                    "registration_status": "REGISTERED",
+                    "trace_id": "trace_test",
+                },
+            )
+            write_json(
+                root / "lineage_chain.json",
+                {
+                    "chain_id": "lineage_chain_test",
+                    "reconstruction": {"reconstructable": True},
+                    "trace_id": "trace_test",
+                },
+            )
+
+            output_path = emit_convergence(
+                root / "validation_decision.json",
+                root / "lineage_registration.json",
+                root / "lineage_chain.json",
+                root,
+            )
+            convergence = json.loads(output_path.read_text(encoding="utf-8"))
+
+            self.assertEqual(convergence["status"], "FAILED")
+            self.assertIn("SHAKTI_VALIDATION_NOT_APPROVED", convergence["reason_codes"])
+
+    def test_tantra_chain_consumes_existing_evidence_package(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            input_path = root / "plain-request.txt"
+            input_path.write_text(
+                "Please process case id runtime-proof-401. "
+                "source system GC_RUNTIME_EVIDENCE_PRODUCER. "
+                "target system SHAKTI_GOVERNANCE_CONSUMER. "
+                "operation governance consumption.",
+                encoding="utf-8",
+            )
+            evidence_root = root / "evidence_runs"
+            run_dir = produce_evidence_run(input_path, evidence_root)
+            summary = run_operational_chain(run_dir / "evidence_bundle.json", root / "tantra")
+
+            self.assertEqual(summary["input_mode"], "existing_evidence_package")
+            self.assertEqual(len([path for path in evidence_root.iterdir() if path.is_dir()]), 1)
+            self.assertEqual(summary["convergence_status"], "CONVERGED")
+            self.assertTrue((root / "tantra" / "validation_decision.json").exists())
+            self.assertTrue((root / "tantra" / "lineage_chain.json").exists())
+
+    def test_tantra_chain_runs_one_trace_to_convergence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            input_path = root / "plain-request.txt"
+            input_path.write_text(
+                "Please process case id runtime-proof-202. "
+                "source system GC_RUNTIME_EVIDENCE_PRODUCER. "
+                "target system SHAKTI_GOVERNANCE_CONSUMER. "
+                "operation lineage capture.",
+                encoding="utf-8",
+            )
+            summary = run_chain(input_path, root / "evidence_runs", root / "tantra")
+
+            validation = json.loads((root / "tantra" / "validation_decision.json").read_text(encoding="utf-8"))
+            governance = json.loads((root / "tantra" / "governance_record.json").read_text(encoding="utf-8"))
+            lineage = json.loads((root / "tantra" / "lineage_chain.json").read_text(encoding="utf-8"))
+            convergence = json.loads((root / "tantra" / "tms_convergence_status.json").read_text(encoding="utf-8"))
+
+            self.assertEqual(summary["trace_id"], validation["trace_id"])
+            self.assertEqual(validation["trace_id"], governance["trace_id"])
+            self.assertEqual(governance["trace_id"], lineage["trace_id"])
+            self.assertEqual(lineage["trace_id"], convergence["trace_id"])
+            self.assertEqual(validation["decision"], "APPROVED")
+            self.assertEqual(convergence["status"], "CONVERGED")
+            self.assertEqual(summary["input_mode"], "generated_sample_evidence")
+            self.assertEqual(summary["sample_input"], input_path.as_posix())
+            self.assertTrue(lineage["reconstruction"]["reconstructable"])
+            proof_text = (root / "tantra" / "TANTRA_CHAIN_PROOF.md").read_text(encoding="utf-8")
+            self.assertIn(
+                "Input Payload -> Evidence Generation -> SHAKTI Validation -> MDU Registration -> TMS Convergence",
+                proof_text,
+            )
+            ansh_proof = (root / "tantra" / "ANSH_INTEGRATION_PROOF.md").read_text(encoding="utf-8")
+            self.assertIn("Phase 6 Execution", ansh_proof)
+            self.assertIn("SHAKTI Validation", ansh_proof)
+            self.assertIn("MDU And TMS Result", ansh_proof)
+
+            for name in [
+                "SHAKTI_CONSUMPTION_PROOF.md",
+                "GOVERNANCE_REGISTRATION_PROOF.md",
+                "TMS_CONVERGENCE_PROOF.md",
+                "TANTRA_CHAIN_PROOF.md",
+                "ANSH_INTEGRATION_PROOF.md",
+            ]:
+                self.assertTrue((root / "tantra" / name).exists())
 
 
 if __name__ == "__main__":

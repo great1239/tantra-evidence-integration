@@ -2,7 +2,21 @@
 
 ## Entry Point
 
-Use `runtime_evidence_producer.py`.
+Use `run_tantra_chain.py` for the current TANTRA integration task.
+
+Run the operational chain from an existing evidence package:
+
+```bash
+python run_tantra_chain.py --evidence outputs/evidence_runs/exec_709063d750fe9fbb4618/evidence_bundle.json --out .
+```
+
+Use the optional demo path only when you need to create a sample evidence package first:
+
+```bash
+python run_tantra_chain.py --input sample_inputs/runtime-proof-010.json --evidence-out outputs/evidence_runs --out .
+```
+
+Use `runtime_evidence_producer.py` only when regenerating evidence packages directly.
 
 Generate proof:
 
@@ -26,15 +40,27 @@ python runtime_evidence_producer.py run --input sample_inputs/runtime-proof-001.
 
 The CLI reads an input payload, extracts canonical fields when the input is mangled JSON or schema-free text, executes the local runtime processor, writes raw `input.json` and `output.json`, then generates the evidence, lineage, replay, and handover bundles.
 
-Execution path:
+The TANTRA chain starts after that point. It consumes an existing `evidence_bundle.json` through SHAKTI, registers governance and lineage outputs for MDU, emits TMS convergence status, and preserves a single trace across all stages.
+
+Operational TANTRA path:
 
 ```text
-runtime_evidence_producer.py
-  -> produce_evidence_run(...)
-  -> execute_payload(...)
-  -> write raw input/output
-  -> write lineage/replay/handover/evidence bundles
-  -> write execution.log
+run_tantra_chain.py
+  -> existing evidence_bundle.json
+  -> shakti_consumer_adapter.py
+  -> governance_record.json + validation_decision.json + registration_reference.json
+  -> lineage_registration.py
+  -> lineage_registration.json + lineage_chain.json
+  -> tms_convergence_emitter.py
+  -> tms_convergence_status.json
+```
+
+Sample bootstrap path:
+
+```text
+run_tantra_chain.py --input ...
+  -> existing produce_evidence_run(...)
+  -> operational TANTRA path above
 ```
 
 ## Evidence Generation Flow
@@ -67,9 +93,33 @@ Each required bundle includes `execution_context` with direct answers for: what 
 
 Each required bundle includes `input_extraction` with the canonical fields extracted from the raw/mangled input and the JSON path used for each field.
 
+## TANTRA Integration Outputs
+
+- `validation_decision.json`: SHAKTI validation result, deterministic decision ID, replay availability, check results, and reason codes.
+- `governance_record.json`: governance record created from validated evidence.
+- `registration_reference.json`: deterministic SHAKTI consumer registration reference.
+- `lineage_registration.json`: MDU registration record with query keys and registered artifact hashes.
+- `lineage_chain.json`: reconstructable chain from input artifact to evidence, governance record, consumer registration, and MDU registration.
+- `tms_convergence_status.json`: TMS status emission using `CONVERGED`, `PARTIAL`, or `FAILED`.
+
+TMS status policy:
+
+- `CONVERGED`: SHAKTI validation is approved, MDU registration is registered, and lineage reconstruction is available.
+- `PARTIAL`: SHAKTI validation is approved, but MDU registration or lineage reconstruction is incomplete.
+- `FAILED`: SHAKTI validation is not approved.
+
 ## Failure Cases
 
 See `EDGE_CASES_AND_FAILURES.md`.
+
+The TANTRA consumer layer also has executable negative-path coverage:
+
+- unsupported SHAKTI contract versions are rejected.
+- missing canonical evidence fields are rejected.
+- artifact hash mismatches are rejected.
+- missing replay metadata is rejected.
+- TMS emits `PARTIAL` when SHAKTI approval exists but MDU registration or reconstruction is incomplete.
+- TMS emits `FAILED` when SHAKTI validation is not approved.
 
 ## Success Criteria
 
@@ -81,6 +131,8 @@ See `EDGE_CASES_AND_FAILURES.md`.
 | Replay reconstruction is possible. | `replay_bundle.json.replay_command`, `replay_inputs`, `expected_outputs`, and `determinism`. |
 | Lineage reconstruction is possible. | `lineage_bundle.json.nodes`, `edges`, and `provenance_chain`. |
 | Governance validation can be performed using the generated evidence. | `evidence_bundle.json` contract/schema/status/confidence/consumer compatibility/artifact hashes. |
+| Evidence is operational inside TANTRA. | `run_tantra_chain.py --evidence ...` produces SHAKTI, MDU, and TMS outputs from one existing evidence package and one trace. |
+| Replay reconstruction remains possible after TANTRA consumption. | `replay_bundle.json` remains referenced by the evidence bundle and is validated by `validation_decision.json`. |
 
 The validator now checks the success criteria surface in addition to required files and hashes.
 
@@ -119,19 +171,19 @@ The `execution.log` files satisfy the assignment requirement for execution scree
 
 ## Consumer Instructions
 
-1. Read `CONSUMER_GUIDE.md`.
-2. Read `DEVELOPER_BUNDLE_GUIDE.md` for the complete developer explanation of bundle structure, field meanings, artifact relationships, replay, and lineage.
-3. Validate the proof set.
-4. Open one run directory under `outputs/evidence_runs`.
-5. Start with `evidence_bundle.json`.
-6. Verify hashes in `artifacts`.
-7. Use `lineage_bundle.json` to reconstruct source, producer, output, and consumer.
-8. Use `replay_bundle.json` to rerun `input.json` and compare output hash.
-9. Use `handover_bundle.json` to confirm index, limitations, and readiness.
+1. Run `python run_tantra_chain.py --evidence outputs/evidence_runs/exec_709063d750fe9fbb4618/evidence_bundle.json --out .`.
+2. Open `validation_decision.json` to inspect SHAKTI validation.
+3. Open `governance_record.json` and `registration_reference.json` to inspect governance registration.
+4. Open `lineage_registration.json` and `lineage_chain.json` to inspect MDU registration and reconstruction.
+5. Open `tms_convergence_status.json` to inspect TMS convergence.
+6. Use the generated proof files for phase-specific review.
+7. Use `replay_bundle.json` under the evidence run directory to rerun `input.json` and compare output hash.
 
 ## Known Limitations
 
 This workspace did not contain an existing SHAKTI runtime implementation. The included reference runtime creates real generated artifacts from actual CLI executions, but it should be replaced with the upstream runtime when that system is available.
+
+This workspace also did not contain a separate Ansh SHAKTI module, remote endpoint, or external TMS schema. The current integration validates against the repository contract `shakti-runtime-evidence/v1` and schema `1.0.0`. The replacement point for Ansh integration is `shakti_consumer_adapter.consume_evidence(...)`; the evidence format should remain unchanged.
 
 Timestamps are real execution times and are intentionally excluded from deterministic ID generation.
 
@@ -145,4 +197,7 @@ The evidence layer is ready for consumer validation once:
 - all 10 execution directories contain the exact required filenames.
 - replay reconstruction matches the expected output hash.
 - lineage reconstruction identifies input, producer, output, and consumer.
+- `python run_tantra_chain.py --evidence outputs/evidence_runs/exec_709063d750fe9fbb4618/evidence_bundle.json --out .` returns `CONVERGED`.
+- SHAKTI, MDU, and TMS outputs share the same `trace_id`.
+- `python -m unittest discover -s tests` passes the SHAKTI rejection, MDU/TMS propagation, replay reconstruction, and lineage reconstruction tests.
 

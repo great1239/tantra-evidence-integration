@@ -14,6 +14,18 @@ The producer generates a self-contained evidence package for each execution:
 
 ## Quick Start
 
+Run the TANTRA operational chain from an existing evidence package:
+
+```bash
+python run_tantra_chain.py --evidence outputs/evidence_runs/exec_709063d750fe9fbb4618/evidence_bundle.json --out .
+```
+
+Optional demo path, when you need to create a sample evidence package first using the existing producer:
+
+```bash
+python run_tantra_chain.py --input sample_inputs/runtime-proof-010.json --evidence-out outputs/evidence_runs --out .
+```
+
 Generate the required 10-run proof set:
 
 ```bash
@@ -44,6 +56,10 @@ Start with `DEVELOPER_BUNDLE_GUIDE.md` when reviewing the generated containers. 
 - `runtime_evidence/canonical.py` owns canonical JSON, SHA-256 hashing, timestamps, schema versions, and deterministic IDs.
 - `runtime_evidence/reference_runtime.py` provides the local execution path used to produce real runtime outputs in this otherwise empty repository.
 - `runtime_evidence/producer.py` writes the evidence, lineage, replay, and handover bundles and validates generated artifacts.
+- `shakti_consumer_adapter.py` consumes existing evidence bundles and emits deterministic SHAKTI governance outputs.
+- `lineage_registration.py` registers SHAKTI-validated evidence lineage for MDU reconstruction.
+- `tms_convergence_emitter.py` emits TMS convergence status from validation and lineage records.
+- `run_tantra_chain.py` runs the operational chain from an existing evidence package to convergence. Its `--input` mode is only a sample bootstrap path that calls the existing producer first.
 
 ## Determinism
 

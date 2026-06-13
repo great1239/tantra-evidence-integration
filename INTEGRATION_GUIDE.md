@@ -1,6 +1,18 @@
 ﻿# Integration Guide
 
-## Producer Integration
+## TANTRA Operational Integration
+
+Run the TANTRA operational chain from an existing evidence package:
+
+```bash
+python run_tantra_chain.py --evidence outputs/evidence_runs/exec_709063d750fe9fbb4618/evidence_bundle.json --out .
+```
+
+Use the optional sample bootstrap path only when an evidence package has not been generated yet:
+
+```bash
+python run_tantra_chain.py --input sample_inputs/runtime-proof-010.json --evidence-out outputs/evidence_runs --out .
+```
 
 Generate evidence for one payload:
 
@@ -56,20 +68,26 @@ The implementation is split into three parts:
 - `runtime_evidence/canonical.py`: canonical JSON, pretty JSON, SHA-256 hashing, deterministic IDs, versions, and timestamps.
 - `runtime_evidence/producer.py`: evidence generation, bundle writing, artifact hashing, and validation.
 - `runtime_evidence/reference_runtime.py`: current local runtime execution path.
+- `shakti_consumer_adapter.py`: SHAKTI consumption, contract/schema checks, artifact integrity checks, replay metadata checks, and governance output.
+- `lineage_registration.py`: MDU lineage registration and reconstructable lineage chain output.
+- `tms_convergence_emitter.py`: TMS convergence status emission.
+- `run_tantra_chain.py`: one-command TANTRA consumption path for existing evidence packages. The `--input` mode is a demo bootstrap that calls the existing producer first.
 
 ## Data Flow
 
 ```text
-input payload
-  -> runtime_evidence_producer.py
-  -> runtime_evidence.producer.produce_evidence_run
-  -> runtime_evidence.reference_runtime.execute_payload
-  -> raw input.json + output.json
-  -> evidence_bundle.json + lineage_bundle.json + replay_bundle.json + handover_bundle.json
-  -> execution.log
+existing evidence_bundle.json
+  -> shakti_consumer_adapter.py
+  -> governance_record.json + validation_decision.json + registration_reference.json
+  -> lineage_registration.py
+  -> lineage_registration.json + lineage_chain.json
+  -> tms_convergence_emitter.py
+  -> tms_convergence_status.json
 ```
 
 The consumer should not need to modify files before reading them.
+
+The raw input payload and evidence generator sit upstream of TANTRA. They are still available for demo generation and validation, but they are not redesigned by the TANTRA integration.
 
 ## Replacing the Reference Runtime
 

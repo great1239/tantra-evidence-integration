@@ -1,0 +1,42 @@
+{
+  "chain_id": "lineage_chain_d9d1e5b40ebe594210e6",
+  "chain_steps": [
+    {
+      "from": "input_artifact",
+      "relationship": "generated_evidence_package",
+      "step": 1,
+      "to": "evidence_bundle"
+    },
+    {
+      "from": "evidence_bundle",
+      "relationship": "validated_by_shakti",
+      "step": 2,
+      "to": "governance_record"
+    },
+    {
+      "from": "governance_record",
+      "relationship": "registered_for_consumption",
+      "step": 3,
+      "to": "consumer_registration"
+    },
+    {
+      "from": "consumer_registration",
+      "relationship": "registered_in_mdu",
+      "step": 4,
+      "to": "mdu_registration"
+    }
+  ],
+  "deterministic": true,
+  "execution_id": "exec_709063d750fe9fbb4618",
+  "reconstruction": {
+    "artifact_count": 4,
+    "ordered_steps": [
+      "generated_evidence_package",
+      "validated_by_shakti",
+      "registered_for_consumption",
+      "registered_in_mdu"
+    ],
+    "reconstructable": true
+  },
+  "trace_id": "trace_b996d7b5e3d19d0967f0"
+}

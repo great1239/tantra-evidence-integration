@@ -1,25 +1,11 @@
 {
+  "consumer": "SHAKTI",
   "contract_version": "shakti-runtime-evidence/v1",
-  "determinism": {
-    "execution_id_basis": "sha256(contract_version + schema_version + extracted_canonical_input_payload)",
-    "random_generation": "not_used",
-    "trace_id_basis": "sha256(case_id + extracted_canonical_input_payload)"
-  },
-  "execution_context": {
-    "what_can_be_replayed": "input.json can be rerun through replay_bundle.json.replay_command and compared to output.json.",
-    "what_consumed_it": "SHAKTI_GOVERNANCE_CONSUMER",
-    "what_happened": "consumer_handoff executed with status success.",
-    "what_produced_it": "runtime_evidence_producer.py",
-    "when_it_happened": "2026-06-12T12:14:02Z",
-    "where_it_happened": "runtime-evidence-producer"
-  },
+  "decision": "APPROVED",
+  "decision_id": "validation_decision_31b41e7df3701143e179",
+  "deterministic": true,
   "execution_id": "exec_709063d750fe9fbb4618",
-  "expected_outputs": [
-    {
-      "reference": "output.json",
-      "sha256": "0fd169e539b59379e1bb3f066f60fcd0d12abfa2b43516e7e28f5ff9b8dd64cc"
-    }
-  ],
+  "governance_record_id": "governance_record_0880fc79c99cd640d7fa",
   "input_extraction": {
     "canonical_fields": {
       "case_id": "runtime-proof-010",
@@ -57,22 +43,15 @@
     "raw_input_sha256": "31b3596915c7d2e42512b20bce9ea7806cb747c50ad6776b0f9687754e3ed55b",
     "raw_input_type": "str"
   },
-  "replay_command": "python runtime_evidence_producer.py run --input outputs/evidence_runs/exec_709063d750fe9fbb4618/input.json --out outputs/evidence_runs",
-  "replay_inputs": [
-    {
-      "reference": "input.json",
-      "sha256": "ef80eb5c054cc7de0ae125a5e3dd767f711d480e87f13e6168a60798e043461c"
-    }
-  ],
-  "replay_reference": "replay_06a6cb658d8cf6052abc",
-  "runtime_requirements": {
+  "producer": {
     "entrypoint": "runtime_evidence_producer.py",
-    "language": "python",
-    "stdlib_only": true
+    "name": "runtime-evidence-producer",
+    "version": "1.0.0"
   },
+  "replay_reference": "replay_06a6cb658d8cf6052abc",
   "schema_version": "1.0.0",
   "source_system": "GC_RUNTIME_EVIDENCE_PRODUCER",
   "target_system": "SHAKTI_GOVERNANCE_CONSUMER",
-  "timestamp": "2026-06-12T12:14:02Z",
-  "trace_id": "trace_b996d7b5e3d19d0967f0"
+  "trace_id": "trace_b996d7b5e3d19d0967f0",
+  "validation_status": "VALIDATED"
 }
