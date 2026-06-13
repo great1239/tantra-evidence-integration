@@ -4,6 +4,10 @@
 
 Use `run_tantra_chain.py` for the current TANTRA integration task.
 
+## Assignment Boundary
+
+Evidence generation is retained as existing upstream infrastructure. The current assignment does not define a new evidence format and does not replace the producer. The new work is the operational TANTRA chain that consumes an existing evidence package, validates it through SHAKTI, registers lineage through MDU, emits TMS convergence, and preserves replay/lineage reconstruction.
+
 Run the operational chain from an existing evidence package:
 
 ```bash
@@ -38,7 +42,7 @@ python runtime_evidence_producer.py run --input sample_inputs/runtime-proof-001.
 
 ## Execution Flow
 
-The CLI reads an input payload, extracts canonical fields when the input is mangled JSON or schema-free text, executes the local runtime processor, writes raw `input.json` and `output.json`, then generates the evidence, lineage, replay, and handover bundles.
+The upstream producer CLI reads an input payload, extracts canonical fields when the input is mangled JSON or schema-free text, executes the local runtime processor, writes raw `input.json` and `output.json`, then generates the evidence, lineage, replay, and handover bundles.
 
 The TANTRA chain starts after that point. It consumes an existing `evidence_bundle.json` through SHAKTI, registers governance and lineage outputs for MDU, emits TMS convergence status, and preserves a single trace across all stages.
 
@@ -63,7 +67,9 @@ run_tantra_chain.py --input ...
   -> operational TANTRA path above
 ```
 
-## Evidence Generation Flow
+## Upstream Evidence Generation Flow
+
+This flow is kept for reproducibility and sample generation. It is not the new TANTRA artifact format.
 
 1. Read the submitted input payload.
 2. Extract canonical fields from aliases, nested objects, or plain English text when the input is noncanonical.

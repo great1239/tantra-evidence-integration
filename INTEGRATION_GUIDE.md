@@ -2,6 +2,8 @@
 
 ## TANTRA Operational Integration
 
+Evidence generation is upstream and already exists in this repository for reproducibility. TANTRA integration starts from an existing `evidence_bundle.json` and produces validation, governance, lineage, convergence, and proof outputs.
+
 Run the TANTRA operational chain from an existing evidence package:
 
 ```bash
@@ -14,7 +16,7 @@ Use the optional sample bootstrap path only when an evidence package has not bee
 python run_tantra_chain.py --input sample_inputs/runtime-proof-010.json --evidence-out outputs/evidence_runs --out .
 ```
 
-Generate evidence for one payload:
+Regenerate upstream evidence for one payload when needed:
 
 ```bash
 python runtime_evidence_producer.py run --input <payload.json> --out outputs/evidence_runs
@@ -32,7 +34,9 @@ Validate generated evidence:
 python runtime_evidence_producer.py validate --root outputs/evidence_runs --min-runs 10
 ```
 
-## Input Contract
+## Upstream Input Contract
+
+This contract belongs to the retained evidence generator. TANTRA consumers should normally start from `evidence_bundle.json`.
 
 The preferred canonical input payload includes:
 
@@ -62,12 +66,12 @@ Please process case id runtime-proof-012. source system GC_RUNTIME_EVIDENCE_PROD
 
 ## Architecture
 
-The implementation is split into three parts:
+The implementation is split into upstream evidence infrastructure and the current TANTRA integration layer:
 
-- `runtime_evidence_producer.py`: CLI entrypoint for `run`, `demo`, and `validate`.
+- `runtime_evidence_producer.py`: upstream evidence CLI entrypoint for `run`, `demo`, and `validate`.
 - `runtime_evidence/canonical.py`: canonical JSON, pretty JSON, SHA-256 hashing, deterministic IDs, versions, and timestamps.
-- `runtime_evidence/producer.py`: evidence generation, bundle writing, artifact hashing, and validation.
-- `runtime_evidence/reference_runtime.py`: current local runtime execution path.
+- `runtime_evidence/producer.py`: upstream evidence generation, bundle writing, artifact hashing, and validation.
+- `runtime_evidence/reference_runtime.py`: current local upstream runtime execution path.
 - `shakti_consumer_adapter.py`: SHAKTI consumption, contract/schema checks, artifact integrity checks, replay metadata checks, and governance output.
 - `lineage_registration.py`: MDU lineage registration and reconstructable lineage chain output.
 - `tms_convergence_emitter.py`: TMS convergence status emission.
